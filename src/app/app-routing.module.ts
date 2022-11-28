@@ -3,6 +3,9 @@ import { Routes, RouterModule } from '@angular/router';
 import { PageNotFoundComponent } from './shared/components';
 
 import { MainWindowComponent } from './main-window/main-window.component';
+import { PackageComponent } from "./package/package.component";
+import { ConnectorComponent } from "./connector/connector.component";
+import { BuildsComponent } from "./builds/builds.component";
 
 const routes: Routes = [
   {
@@ -11,11 +14,20 @@ const routes: Routes = [
     pathMatch: 'full'
   },
   {
-    path
-  },
-  {
     path: 'home',
     component: MainWindowComponent
+  },
+  {
+    path: 'packages',
+    component: PackageComponent
+  },
+  {
+    path: 'connector',
+    component: ConnectorComponent
+  },
+  {
+    path: 'builds',
+    component: BuildsComponent
   },
   {
     path: '**',
