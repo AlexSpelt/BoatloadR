@@ -1,6 +1,5 @@
 class GithubHelper {
-    constructor () {}
-
+    
     /**
      * This function returns the version of the package
      */

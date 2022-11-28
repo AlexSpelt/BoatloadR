@@ -1,7 +1,6 @@
 import { Package } from "./Package";
 
 class PackageDatabaseHelper {
-    constructor () {}
 
     /**
      * Search for a package

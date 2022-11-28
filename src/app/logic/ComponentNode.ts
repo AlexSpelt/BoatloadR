@@ -12,7 +12,7 @@ export class ComponenentNode {
     constructor(
         private isOut: boolean,
         private type: Type
-    ) {}
+    ) { }
     
 
     /**

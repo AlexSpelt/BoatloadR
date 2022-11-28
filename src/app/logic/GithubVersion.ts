@@ -3,9 +3,7 @@ class GithubVersion {
     constructor (
         private commit: String, 
         private version: String
-    ) {
-    }
-
+    ) { }
 
     /**
      * Getter $commit
@@ -38,5 +36,4 @@ class GithubVersion {
 	public set $version(value: String) {
 		this.version = value;
 	}
-    
 }
