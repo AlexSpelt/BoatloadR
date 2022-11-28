@@ -2,7 +2,7 @@ import { Package } from "./Package";
 
 class InstallList {
     private readonly serverURL: string = 'https://BoatLoadR.alexspelt.nl';
-    private listInstall: Array<Package> = this.getAllInstalled(this.serverURL);;
+    private listInstall: Array<Package> = this.getAllInstalled(this.serverURL);
     private listActive: Array<Package> = [];
     private relations: Array<Relation> = [];
 
