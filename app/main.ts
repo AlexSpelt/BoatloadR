@@ -23,6 +23,9 @@ function createWindow(): BrowserWindow {
     },
   });
 
+  // Devtools
+  win.webContents.openDevTools()
+
   if (serve) {
     const debug = require('electron-debug');
     debug();
