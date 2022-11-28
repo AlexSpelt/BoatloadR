@@ -1,4 +1,4 @@
-import { ComNode } from "./ComNode";
+import { ComNode } from "./ComponentNode";
 import { Package } from "./Package";
 
 class Component extends Package {

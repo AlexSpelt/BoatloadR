@@ -1,4 +1,4 @@
-import { ComNode } from "./ComNode";
+import { ComNode } from "./ComponentNode";
 
 export class Package {
     private name: string;

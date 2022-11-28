@@ -1,5 +1,5 @@
 import { SerialPort } from "electron";
-import { ComNode } from "./ComNode";
+import { ComNode } from "./ComponentNode";
 import { Package } from "./Package";
 
 class Sensor extends Package {
