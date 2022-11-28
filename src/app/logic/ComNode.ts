@@ -15,7 +15,7 @@ export class ComNode {
         type: Type
     ) {
         this.isOut = isOut;
-        this.type = type
+        this.type = type;
         this.topicNumber = 0;
     }
     
