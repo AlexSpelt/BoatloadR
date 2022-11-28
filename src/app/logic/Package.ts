@@ -16,7 +16,7 @@ export class Package {
      * @param repoURL github repo of the package
      * @param author author of the package
      * @param organisation organisation associated with the author
-     * @param isINstalled if the package is installed locally
+     * @param isInstalled if the package is installed locally
      * @param version version
      * @param versions array of versions
      * @param nodes attached nodes on current version
@@ -26,7 +26,7 @@ export class Package {
         repoURL: string,
         author: string,
         organisation: string,
-        isINstalled: boolean,
+        isInstalled: boolean,
         version: string,
         versions: Array<string>,
         nodes: Array<ComNode>
@@ -35,7 +35,7 @@ export class Package {
         this.repoURL = repoURL;
         this.author = author;
         this.organisation = organisation;
-        this.isInstalled = isINstalled;
+        this.isInstalled = isInstalled;
         this.version = version;
         this.versions = versions;
         this.nodes = nodes;
