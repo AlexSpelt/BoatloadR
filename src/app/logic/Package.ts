@@ -1,14 +1,7 @@
 import { ComNode } from "./ComponentNode";
 
 export class Package {
-    private name: string;
-    private repoURL: string;
-    private author: string;
-    private organisation: string;
-    private isInstalled: boolean;
-    private version: string;
-    private versions: Array<string>;
-    private nodes: Array<ComNode>;
+
 
     /**
      * Constructs the Package class
@@ -22,23 +15,15 @@ export class Package {
      * @param nodes attached nodes on current version
      */
     constructor(
-        name: string,
-        repoURL: string,
-        author: string,
-        organisation: string,
-        isInstalled: boolean,
-        version: string,
-        versions: Array<string>,
-        nodes: Array<ComNode>
+        private name: string,
+        private repoURL: string,
+        private author: string,
+        private organisation: string,
+        private isInstalled: boolean,
+        private version: string,
+        private versions: Array<string>,
+        private nodes: Array<ComNode>
     ) {
-        this.name = name;
-        this.repoURL = repoURL;
-        this.author = author;
-        this.organisation = organisation;
-        this.isInstalled = isInstalled;
-        this.version = version;
-        this.versions = versions;
-        this.nodes = nodes;
     }
 
     /**
