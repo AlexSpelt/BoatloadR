@@ -1,8 +1,7 @@
 import { ComponenentNode } from "./ComponentNode";
 
 export class Package {
-
-
+    
     /**
      * Constructs the Package class
      * @param name name of the package
@@ -23,8 +22,7 @@ export class Package {
         private version: string,
         private versions: Array<string>,
         private nodes: Array<ComponenentNode>
-    ) {
-    }
+    ) { }
 
     /**
      * install code

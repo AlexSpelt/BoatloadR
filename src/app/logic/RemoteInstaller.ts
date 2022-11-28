@@ -25,6 +25,5 @@ class RemoteInstaller implements Installer {
      */
     setRunScript(p: Package) {
         throw new Error("Method not implemented.");
-    }
-    
+    } 
 }
