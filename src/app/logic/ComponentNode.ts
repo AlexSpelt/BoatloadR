@@ -1,9 +1,8 @@
 import { Type } from "./Type";
 
-export class ComNode {
-    private isOut: boolean;
-    private type: Type;
-    private topicNumber: number
+export class ComponenentNode {
+
+    private topicNumber: number = 0;
 
     /**
      * Constructs a Communication Node
@@ -11,13 +10,9 @@ export class ComNode {
      * @param type the type of the node
      */
     constructor(
-        isOut: boolean,
-        type: Type
-    ) {
-        this.isOut = isOut;
-        this.type = type;
-        this.topicNumber = 0;
-    }
+        private isOut: boolean,
+        private type: Type
+    ) {}
     
 
     /**

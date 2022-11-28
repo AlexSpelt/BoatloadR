@@ -1,9 +1,9 @@
 import { SerialPort } from "electron";
-import { ComNode } from "./ComponentNode";
+import { ComponenentNode } from "./ComponentNode";
 import { Package } from "./Package";
 
 class Sensor extends Package {
-    private sourceConfig: SerialPort
+    private sourceConfig: SerialPort = null;
 
     constructor (
         name: string,
@@ -13,7 +13,7 @@ class Sensor extends Package {
         isINstalled: boolean,
         version: string,
         versions: Array<string>,
-        nodes: Array<ComNode>
+        nodes: Array<ComponenentNode>
     ) {
         super(name,
             repoURL,
@@ -22,9 +22,7 @@ class Sensor extends Package {
             isINstalled,
             version,
             versions,
-            nodes)
-
-        this.sourceConfig = null;
+            nodes);
     }
 
     /**

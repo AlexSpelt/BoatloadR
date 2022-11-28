@@ -1,4 +1,4 @@
-import { ComNode } from "./ComponentNode";
+import { ComponenentNode } from "./ComponentNode";
 import { Package } from "./Package";
 
 class Component extends Package {
@@ -10,7 +10,7 @@ class Component extends Package {
         isInstalled: boolean,
         version: string,
         versions: Array<string>,
-        nodes: Array<ComNode>
+        nodes: Array<ComponenentNode>
     ) {
         super(name,
             repoURL,

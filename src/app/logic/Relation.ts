@@ -1,19 +1,13 @@
 class Relation {
-    private publisherNode: Node;
-    private subscriberNode: Node;
-
     /**
      * Constructs a Relation
      * @param publisherNode 
      * @param subscriberNode 
      */
     constructor (
-        publisherNode: Node,
-        subscriberNode: Node
-    ) {
-        this.publisherNode = publisherNode;
-        this.subscriberNode = subscriberNode;
-    }
+        private publisherNode: Node,
+        private subscriberNode: Node
+    ) {}
 
     /**
      * This function returns the publisher node

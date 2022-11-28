@@ -1,13 +1,9 @@
 class GithubVersion {
-    private commit: String;
-    private version: String;
 
     constructor (
-        commit: string, 
-        version: string
+        private commit: String, 
+        private version: String
     ) {
-        this.commit = commit;
-        this.version = version;
     }
 
 

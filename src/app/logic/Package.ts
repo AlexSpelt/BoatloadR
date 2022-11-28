@@ -1,4 +1,4 @@
-import { ComNode } from "./ComponentNode";
+import { ComponenentNode } from "./ComponentNode";
 
 export class Package {
 
@@ -22,7 +22,7 @@ export class Package {
         private isInstalled: boolean,
         private version: string,
         private versions: Array<string>,
-        private nodes: Array<ComNode>
+        private nodes: Array<ComponenentNode>
     ) {
     }
 
@@ -105,9 +105,9 @@ export class Package {
 
     /**
      * Getter $nodes
-     * @return {Array<ComNode>}
+     * @return {Array<ComponenentNode>}
      */
-	public get $nodes(): Array<ComNode> {
+	public get $nodes(): Array<ComponenentNode> {
 		return this.nodes;
 	}
 }

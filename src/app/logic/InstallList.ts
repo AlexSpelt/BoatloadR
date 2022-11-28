@@ -1,23 +1,10 @@
 import { Package } from "./Package";
 
 class InstallList {
-    private serverURL: string;
-    private listInstall: Array<Package>
-    private listActive: Array<Package>
-    private relations: Array<Relation>
-
-    /**
-     * Constructs the install list
-     * @param serverURL URL to get the files
-     */
-    public constructor(
-        serverURL: string
-    ){
-        this.serverURL = serverURL;
-        this.listInstall = this.getAllInstalled(serverURL);
-        this.listActive = [];
-        this.relations = [];
-    }
+    private readonly serverURL: string = 'https://BoatLoadR.alexspelt.nl';
+    private listInstall: Array<Package> = this.getAllInstalled(this.serverURL);;
+    private listActive: Array<Package> = [];
+    private relations: Array<Relation> = [];
 
     /**
      * Gets all installed packages to initialize the installed list array
