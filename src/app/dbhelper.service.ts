@@ -26,7 +26,7 @@ export class DBHelperService {
    * @param searchType Querry type 
    * @returns array of possible objects
    */
-  public find(URL: string, q: string, searchType: SearchType): Promise<Array<JSONpromise>> {
+  public async find(URL: string, q: string, searchType: SearchType): Promise<Array<JSONpromise>> {
     switch (searchType) {
       case SearchType.name:
         //@ts-ignore
