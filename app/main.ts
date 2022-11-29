@@ -16,6 +16,7 @@ function createWindow(): BrowserWindow {
     y: 0,
     width: size.width,
     height: size.height,
+    icon: 'app/src/img/boatloadr_nobg.ico',
     webPreferences: {
       nodeIntegration: true,
       allowRunningInsecureContent: (serve),
