@@ -10,7 +10,7 @@ class Sensor extends Package {
         repoURL: string,
         author: string,
         organisation: string,
-        isINstalled: boolean,
+        isInstalled: boolean,
         version: string,
         versions: Array<string>,
         nodes: Array<ComponenentNode>
@@ -19,7 +19,7 @@ class Sensor extends Package {
             repoURL,
             author,
             organisation,
-            isINstalled,
+            isInstalled,
             version,
             versions,
             nodes);
