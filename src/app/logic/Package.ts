@@ -108,4 +108,12 @@ export class Package {
 	public get $nodes(): Array<CommunicationNode> {
 		return this.nodes;
 	}
+
+    /**
+     * Setter $isInstalled
+     * @param {boolean} value
+     */
+	public set $isInstalled(value: boolean) {
+		this.isInstalled = value;
+	}
 }
