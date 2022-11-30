@@ -1,6 +1,6 @@
 import { Type } from "./Type";
 
-export class ComponenentNode {
+export class CommunicationNode {
 
     private topicNumber: number = 0;
 
