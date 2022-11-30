@@ -91,11 +91,11 @@ try {
 import { writeFile, readFile } from 'fs/promises';
 import { tmpdir } from 'os';
 
-const electron = require('electron')
-const ipc = electron.ipcMain
-const shell = electron.shell
+const electron = require('electron');
+const ipc = electron.ipcMain;
+const shell = electron.shell;
 
-const jsonPath = path.join(tmpdir(), 'status.json')
+const jsonPath = '/src/DB-json/db.json';
 
 ipc.on('read-local-status', async (event) => {
   const win = BrowserWindow.fromWebContents(event.sender)
