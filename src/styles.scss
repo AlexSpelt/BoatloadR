@@ -27,3 +27,10 @@
   border: 2px solid #373b3e !important;
 }
 /* END MAIN ELEMENTS */
+
+/* START MODAL */
+.modal-header, .modal-footer {
+  border-top: none !important;
+  border-bottom: none !important;
+}
+/* END MODAL */
