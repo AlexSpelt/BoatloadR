@@ -85,3 +85,42 @@ try {
   // Catch Error
   // throw e;
 }
+
+// electron API
+
+import { writeFile, readFile } from 'fs/promises';
+import { tmpdir } from 'os';
+
+const electron = require('electron')
+const ipc = electron.ipcMain
+const shell = electron.shell
+
+const jsonPath = path.join(tmpdir(), 'status.json')
+
+ipc.on('read-local-status', async (event) => {
+  const win = BrowserWindow.fromWebContents(event.sender)
+
+  readFile(jsonPath, 'utf8')
+    .then((contents) => {
+      event.sender.send('send-local-status', contents);
+    }).catch(async () => {
+      await writeFile(jsonPath, JSON.stringify([]));
+      event.sender.send('send-local-status', []);
+    });
+
+})
+
+ipc.on('write-local-status', async (event, args) => {
+  const win = BrowserWindow.fromWebContents(event.sender)
+
+  const newData: string = args[0];
+
+  writeFile(jsonPath, newData).then(() => {
+    event.sender.send('send-local-status', newData);
+  }).catch(async (err) => {
+    console.error('Error writing file', err);
+
+    event.sender.send('error-set-local-status', err.toString());
+  });
+
+})
