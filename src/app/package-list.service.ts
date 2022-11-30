@@ -1,5 +1,8 @@
 import { Injectable } from '@angular/core';
+import { DBHelperService } from './dbhelper.service';
 import { Package } from './logic/Package';
+import { CommunicationNode } from './logic/CommunicationNode';
+import { Type } from './logic/Type'
 
 @Injectable({
   providedIn: 'root'
@@ -11,6 +14,26 @@ export class PackageListService {
   private relations: Array<Relation> = [];
 
   constructor() { }
+
+  /**
+   * This function is responsible for crreating a package based on
+   * the data from the downloaded github repo and the data from the redis database.
+   * It sends the created pacakge to the list used in the application.
+   * @param name name of the package
+   * @param version version of the packe
+   * @param author author of the package
+   * @param organisation organisation of the author
+   * @param repoURL URL of the github repository
+   * @param versions other versions of the package
+   */
+  public createPackage(name: string, version: string, author: string, organisation: string, repoURL: string, versions: Array<string>){
+    // nodes moet worden gelezen uit de JSON/YAML/XML/markup-flavor van de package. bottom is palceholder code
+    let nodes = [new CommunicationNode(false, Type.coordinate), new CommunicationNode(true, Type.directions)] 
+
+    const p = new Package(name, repoURL, author, organisation, false, version, versions, nodes);
+
+    this.addInstalledPackage(p);
+  }
 
   /**
    * Gets all installed packages to initialize the installed list array
