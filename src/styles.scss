@@ -27,3 +27,8 @@
   border: 2px solid #373b3e !important;
 }
 /* END MAIN ELEMENTS */
+
+.modal-header, .modal-footer {
+  border-top: none !important;
+  border-bottom: none !important;
+}
