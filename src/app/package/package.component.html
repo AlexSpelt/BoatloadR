@@ -32,8 +32,12 @@
                             <div class="modal-body align-content-start text-start">
                                 <label for="packageName">Package name</label><br>
                                 <input class="dark-border form-control mt-2 bg-dark text-white" type="text" id="packageName" name="packageName" placeholder="Perception"><br>
-                                <label for="githubUrl">Github URL</label><br>
-                                <input class="dark-border form-control mt-2 bg-dark text-white" type="text" id="githubUrl" name="githubUrl" placeholder="https://github.com/AlexSpelt/BoatloadR"><br><br>
+                                <label for="githubUrl">Github URL<span class="color-red">*</span></label><br>
+                                <input class="dark-border form-control mt-2 bg-dark text-white" type="text" id="githubUrl" name="githubUrl" placeholder="https://github.com/AlexSpelt/BoatloadR">
+
+                                <p class="small pt-3"><span class="color-red">*</span> If a Github URL is unavailable, a local file can be uploaded.</p>
+                                <label for="formFile" class="form-label">Upload local file</label>
+                                <input class="form-control dark-border bg-dark text-white-50" type="file" id="formFile"><br>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary px-5" data-bs-dismiss="modal">Close
