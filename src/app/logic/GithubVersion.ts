@@ -1,4 +1,4 @@
-class GithubVersion {
+export class GithubVersion {
 
     constructor (
         private commit: String, 

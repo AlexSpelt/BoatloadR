@@ -47,6 +47,26 @@ export class ElectronService {
       // If you want to use a NodeJS 3rd party deps in Renderer process,
       // ipcRenderer.invoke can serve many common use cases.
       // https://www.electronjs.org/docs/latest/api/ipc-renderer#ipcrendererinvokechannel-args
+
+      // Make shure the filePath for the boatloadr folder exists
+      console.log(this.filePath);
+
+      if(this.fs.existsSync(this.filePath)) {
+        console.log('Default storage folder for boatloadr does not exist. Creating it now.');
+        
+        this.fs.mkdir(this.filePath, { recursive: true }, (err) => {
+          if (err) throw err;
+          else console.log('Default storage folder for boatloadr created.');
+        });
+      }
+    }
+  }
+
+  get filePath(): string {
+    if(process.platform === 'win32') {
+      return 'C:\\boatloadr\\';
+    } else {
+      return '~/boatloadr/';
     }
   }
 

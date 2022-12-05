@@ -18,6 +18,7 @@ function createWindow(): BrowserWindow {
     height: size.height,
     icon: 'app/src/img/boatloadr_nobg.ico',
     webPreferences: {
+      webSecurity: false,
       nodeIntegration: true,
       allowRunningInsecureContent: (serve),
       contextIsolation: false,  // false if you want to run e2e test with Spectron
