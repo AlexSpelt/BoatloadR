@@ -37,7 +37,6 @@ export class GithubHelperService {
   /**
    * This function downloads the version by commmit
    * @param commit commit hash
-   * @wip
    */
   public async downloadCommit(githubUrl: String, commit: String): Promise<Blob> {
     // Example URL
@@ -61,8 +60,7 @@ export class GithubHelperService {
 
         const buffer = new Buffer(await file.arrayBuffer());
         
-        // TODO get the right path
-        this.electron.fs.writeFileSync('/' + fileName, buffer);
+        this.electron.fs.writeFileSync(this.electron.filePathLocalStorage + '/' + fileName, buffer);
 
         return file;
       }
