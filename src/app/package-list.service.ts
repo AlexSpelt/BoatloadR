@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
-import { DBHelperService } from './dbhelper.service';
 import { Package } from './logic/Package';
 import { CommunicationNode } from './logic/CommunicationNode';
 import { Type } from './logic/Type'
 import { ElectronService } from './core/services';
-import { json } from 'stream/consumers';
+import { Relation } from './logic/Relation';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +14,7 @@ export class PackageListService {
   private listActive: Array<Package> = [];
   private relations: Array<Relation> = [];
 
-  constructor(private electron: ElectronService, private dbHelper: DBHelperService) { 
+  constructor(private electron: ElectronService) { 
     this.$listInstall = this.getAllInstalled();
   }
 
@@ -53,8 +52,8 @@ export class PackageListService {
       json.forEach(element => {
         let nodes = [];
         element.nodes.forEach(n => {
-          let node = new CommunicationNode(n.isOut, n.type)
-          nodes.push(node)
+          let node = new CommunicationNode(n.isOut, n.type);
+          nodes.push(node);
         });
         let p = new Package(element.name, element.repoURL, element.author, element.organisation, true, element.version, element.versions, nodes);
         list.push(p);
@@ -73,11 +72,11 @@ export class PackageListService {
       if (err) throw err;
       let jsonFile = JSON.parse(data.toString());
 
-      jsonFile.push(p)
+      jsonFile.push(p);
 
-      let jsonData = JSON.stringify(jsonFile)
+      let jsonData = JSON.stringify(jsonFile);
 
-      this.electron.fs.writeFile('./app/src/DB-json/db.json', jsonFile)
+      this.electron.fs.writeFile('./app/src/DB-json/db.json', jsonFile, null);
     });
     // add to $listInstall
     this.listInstall.push(p);

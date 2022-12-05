@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { ElectronService } from '../core/services';
+import { PackageListService } from '../package-list.service';
 
 @Component({
   selector: 'app-package',
@@ -7,9 +9,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class PackageComponent implements OnInit {
 
-  constructor() { }
+  constructor(private electron: ElectronService, private packageList:PackageListService) { 
+
+  }
 
   ngOnInit(): void {
+    console.log(this.packageList.$listInstall);
   }
 
 }
