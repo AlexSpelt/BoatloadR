@@ -38,6 +38,7 @@ export class DatabaseHelperService {
    }
 
    private async dbToPackage(dbPackage: any): Promise<Package> {
+      // TODO local file resolver instead of github
       const versionsInfo = await this.githubHelper.getVersion(dbPackage.githubUrl);
 
       return new Package(
