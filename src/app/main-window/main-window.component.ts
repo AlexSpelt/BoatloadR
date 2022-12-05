@@ -28,8 +28,7 @@ export class MainWindowComponent implements OnInit {
 
       // Get userData path
       if(this.electron.isElectron) {
-        const getPath = window.require('path');
-        console.log(getPath);
+        
       }
     });
   }

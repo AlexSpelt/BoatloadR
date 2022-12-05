@@ -125,3 +125,16 @@ ipc.on('write-local-status', async (event, args) => {
   });
 
 })
+
+// this code is responsible for providing an path for the electron app to save the downloaded files
+ipc.on('getFilePath', async (event, args) => {
+  const appPath = app.getPath('userData');
+  const workingFolder = appPath + '/storage';
+
+  // check if folder does not excist, create it
+  if (!fs.existsSync(workingFolder)) {
+    fs.mkdirSync(workingFolder);
+  }
+
+  event.sender.send('filePath', workingFolder);
+})

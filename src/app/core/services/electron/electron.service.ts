@@ -14,6 +14,7 @@ export class ElectronService {
   webFrame: typeof webFrame;
   childProcess: typeof childProcess;
   fs: typeof fs;
+  private filePath: string = '';
 
   constructor() {
     // Conditional imports
@@ -49,25 +50,35 @@ export class ElectronService {
       // https://www.electronjs.org/docs/latest/api/ipc-renderer#ipcrendererinvokechannel-args
 
       // Make shure the filePath for the boatloadr folder exists
-      console.log(this.filePath);
-
-      if(this.fs.existsSync(this.filePath)) {
-        console.log('Default storage folder for boatloadr does not exist. Creating it now.');
+      this.getFilePath().then((filePath) => {
+        console.log(`filePath: ${filePath}`);
+        this.filePath = filePath;
         
-        this.fs.mkdir(this.filePath, { recursive: true }, (err) => {
-          if (err) throw err;
-          else console.log('Default storage folder for boatloadr created.');
-        });
-      }
+        if(!this.fs.existsSync(this.filePath)) {
+          console.log('Default storage folder for boatloadr does not exist. Creating it now.');
+          
+          this.fs.mkdir(this.filePath, { recursive: true }, (err) => {
+            if (err) throw err;
+            else console.log('Default storage folder for boatloadr created.');
+          });
+        }
+      }).catch((err) => console.error);
+
     }
   }
 
-  get filePath(): string {
-    if(process.platform === 'win32') {
-      return 'C:\\boatloadr\\';
-    } else {
-      return '~/boatloadr/';
-    }
+  private async getFilePath(): Promise<string> {
+    return new Promise((resolve, reject) => {
+      this.ipcRenderer.send('getFilePath');
+
+      this.ipcRenderer.on('filePath', (event, arg) => {
+        resolve(arg);
+      });
+    })
+  }
+
+  get filePathLocalStorage(): string {
+    return this.filePath
   }
 
   get isElectron(): boolean {
