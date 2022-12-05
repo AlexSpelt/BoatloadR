@@ -25,11 +25,6 @@ export class MainWindowComponent implements OnInit {
 
       //   console.log(`The donwloaded file is ${download.size} bytes long and is of type ${download.type}`);
       // });
-
-      // Get userData path
-      if(this.electron.isElectron) {
-        
-      }
     });
   }
 
