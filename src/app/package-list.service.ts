@@ -3,17 +3,21 @@ import { DBHelperService } from './dbhelper.service';
 import { Package } from './logic/Package';
 import { CommunicationNode } from './logic/CommunicationNode';
 import { Type } from './logic/Type'
+import { ElectronService } from './core/services';
+import { json } from 'stream/consumers';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PackageListService {
   private readonly serverURL: string = 'https://BoatLoadR.alexspelt.nl';
-  private listInstall: Array<Package> = this.getAllInstalled(this.serverURL);
+  private listInstall: Array<Package> = this.getAllInstalled();
   private listActive: Array<Package> = [];
   private relations: Array<Relation> = [];
 
-  constructor() { }
+  constructor(private electron: ElectronService, private dbHelper: DBHelperService) { 
+    this.$listInstall = this.getAllInstalled();
+  }
 
   /**
    * This function is responsible for crreating a package based on
@@ -31,17 +35,32 @@ export class PackageListService {
     let nodes = [new CommunicationNode(false, Type.coordinate), new CommunicationNode(true, Type.directions)] 
 
     const p = new Package(name, repoURL, author, organisation, false, version, versions, nodes);
+    p.install()
 
     this.addInstalledPackage(p);
   }
 
   /**
    * Gets all installed packages to initialize the installed list array
-   * @param serverURL The URL of the server to get the packages from
    * @returns list of all installed packages
    */
-  private getAllInstalled(serverURL: string): Array<Package> {
-    throw new Error("Method not implemented.");
+  private getAllInstalled(): Array<Package> {
+    let list = []
+    this.electron.ipcRenderer.send('read-local-status');
+    this.electron.ipcRenderer.on('send-local-status',(event, arg) => {
+      let json = JSON.parse(arg)
+
+      json.forEach(element => {
+        let nodes = [];
+        element.nodes.forEach(n => {
+          let node = new CommunicationNode(n.isOut, n.type)
+          nodes.push(node)
+        });
+        let p = new Package(element.name, element.repoURL, element.author, element.organisation, true, element.version, element.versions, nodes);
+        list.push(p);
+      });
+    });
+    return list;
   }
 
   /**
@@ -49,7 +68,21 @@ export class PackageListService {
    * @param p Package to add to the installed list
    */
   public addInstalledPackage(p: Package) {
+    // add to db.json
+    this.electron.fs.readFile('./app/src/DB-json/db.json', (err, data) => {
+      if (err) throw err;
+      let jsonFile = JSON.parse(data.toString());
+
+      jsonFile.push(p)
+
+      let jsonData = JSON.stringify(jsonFile)
+
+      this.electron.fs.writeFile('./app/src/DB-json/db.json', jsonFile)
+    });
+    // add to $listInstall
     this.listInstall.push(p);
+    // mark package installed
+    p.$isInstalled = true;
   }
 
   /**

@@ -10,13 +10,39 @@
         <div class="row">
             <div class="col-6 text-start">
                 <form class="input-group">
-                    <input class="form-control bg-dark text-white mr-sm-2" type="search" aria-label="Search">
+                    <input class="form-control bg-dark text-white mr-sm-2" placeholder="Start typing..." type="search" aria-label="Search">
                     <button class="btn btn-light px-5" type="submit">Search</button>
                 </form>
             </div>
 
             <div class="col-6 text-end">
-                <button class="btn btn-success px-5">Create package</button>
+                <button class="btn btn-success px-5" data-bs-toggle="modal" data-bs-target="#createPackageModal">Create
+                    package
+                </button>
+
+                <div class="modal modal-lg" id="createPackageModal" tabindex="-1" aria-labelledby="createPackageModal"
+                     aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content bg-dark">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Creating a new package</h5>
+                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body align-content-start text-start">
+                                <label for="packageName">Package name</label><br>
+                                <input class="form-control mt-2 bg-dark text-white" type="text" id="packageName" name="packageName" placeholder="Perception"><br>
+                                <label for="githubUrl">Github URL</label><br>
+                                <input class="form-control mt-2 bg-dark text-white" type="text" id="githubUrl" name="githubUrl" placeholder="https://github.com/AlexSpelt/BoatloadR"><br><br>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary px-5" data-bs-dismiss="modal">Close
+                                </button>
+                                <button type="button" class="btn btn-success px-5">Create package</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -28,7 +54,7 @@
                         <th scope="col">#</th>
                         <th scope="col">Package</th>
                         <th scope="col">Version</th>
-                        <th scope="col">Created</th>
+                        <th style="width: 10%;" scope="col">Created</th>
                         <th scope="col">Description</th>
                         <th scope="col">Action</th>
                     </tr>
