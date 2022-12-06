@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { lastValueFrom, Observable } from 'rxjs';
 import { GithubHelperService } from './github-helper.service';
+import { GithubVersion } from './logic/GithubVersion';
 import { Package } from './logic/Package';
 
 @Injectable({
@@ -17,11 +18,9 @@ export class DatabaseHelperService {
    public async searchPackages (method: 'name' | 'author' | 'organisation', query: string): Promise<Array<Package>> {    
       const response = await lastValueFrom(
         this.http.get(`https://boatloadr.alexspelt.nl/search/${method}/${query}`) as Observable<string>
-      )
+      ) as any as dbResponse[];
 
-      const parsedResponse: dbResponse[] = JSON.parse(response);
-
-      return Promise.all(parsedResponse.map(this.dbToPackage));
+      return Promise.all(response.map((val) => this.dbToPackage(val)));
    }
 
    /**
@@ -30,33 +29,45 @@ export class DatabaseHelperService {
     public async getAllPackages (): Promise<Array<Package>> {    
       const response = await lastValueFrom(
         this.http.get(`https://boatloadr.alexspelt.nl/packages`) as Observable<string>
-      )
+      ) as any as dbResponse[];
 
-      const parsedResponse: dbResponse[] = JSON.parse(response);
-
-      return Promise.all(parsedResponse.map(this.dbToPackage));
+      return Promise.all(response.map((val) => this.dbToPackage(val)));
    }
 
    private async dbToPackage(dbPackage: any): Promise<Package> {
-      // TODO local file resolver instead of github
-      const versionsInfo = await this.githubHelper.getVersion(dbPackage.githubUrl);
+    console.log(dbPackage)
 
-      return new Package(
-        dbPackage.key, 
-        dbPackage.githubRepo, 
-        dbPackage.author,
-        dbPackage.organisation,
-        false,
-        versionsInfo[0].$version,
-        versionsInfo.map(versionInfo => versionInfo.$version),
-        []
-      );
+    if((!dbPackage.filePath && !dbPackage.githubRepo))
+      return undefined;
+
+    let githubVersionInfo: GithubVersion[];
+    let fileVersionInfo: string;
+
+    if(!(dbPackage.githubRepo === undefined || dbPackage.githubRepo === null))
+      // @ts-ignore
+      githubVersionInfo = await this.githubHelper.getVersion(dbPackage.githubRepo)
+        .catch((err) => { console.log('package ' + dbPackage.key + ' does not excist') });
+
+    if(!(dbPackage.filePath === undefined || dbPackage.filePath === null))
+      fileVersionInfo = 'Een versie ofzo'; // TODO package resolver hier zetten.
+
+    return new Package(
+      dbPackage.key, 
+      dbPackage.githubRepo, 
+      dbPackage.author,
+      dbPackage.organisation,
+      false,
+      fileVersionInfo ?? githubVersionInfo[0].$version,
+      [fileVersionInfo] ?? githubVersionInfo.map(versionInfo => versionInfo.$version),
+      []
+    );
    }
 }
 
 interface dbResponse {
   key: string;
-  githubRepo: string;
+  githubRepo?: string;
+  filePath?: string;
   author: string;
   organisation: string;
 }

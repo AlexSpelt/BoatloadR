@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ElectronService } from '../core/services';
+import { DatabaseHelperService } from '../database-helper.service';
 import { GithubHelperService } from '../github-helper.service';
 
 @Component({
@@ -9,7 +9,7 @@ import { GithubHelperService } from '../github-helper.service';
 })
 export class MainWindowComponent implements OnInit {
 
-  constructor(private githubHelper: GithubHelperService, private electron: ElectronService) { }
+  constructor(private githubHelper: GithubHelperService, private databaseHelper: DatabaseHelperService) { }
 
   ngOnInit(): void {
 
@@ -25,6 +25,8 @@ export class MainWindowComponent implements OnInit {
 
       //   console.log(`The donwloaded file is ${download.size} bytes long and is of type ${download.type}`);
       // });
+
+      this.databaseHelper.getAllPackages().then(console.log);
     });
   }
 
