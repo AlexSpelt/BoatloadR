@@ -1,39 +1,39 @@
 export class GithubVersion {
 
     constructor (
-        private commit: String, 
-        private version: String
+        private commit: string, 
+        private version: string
     ) { }
 
     /**
      * Getter $commit
-     * @return {String}
+     * @return {string}
      */
-	public get $commit(): String {
+	public get $commit(): string {
 		return this.commit;
 	}
 
     /**
      * Getter $version
-     * @return {String}
+     * @return {string}
      */
-	public get $version(): String {
+	public get $version(): string {
 		return this.version;
 	}
 
     /**
      * Setter $commit
-     * @param {String} value
+     * @param {string} value
      */
-	public set $commit(value: String) {
+	public set $commit(value: string) {
 		this.commit = value;
 	}
 
     /**
      * Setter $version
-     * @param {String} value
+     * @param {string} value
      */
-	public set $version(value: String) {
+	public set $version(value: string) {
 		this.version = value;
 	}
 }
