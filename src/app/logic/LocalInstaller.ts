@@ -5,7 +5,7 @@ import { CommunicationNode } from "./CommunicationNode";
 import { Installer } from "./Installer";
 import { Package } from "./Package";
 
-class LocalInstaller implements Installer {
+export class LocalInstaller implements Installer {
 
     constructor(private electron: ElectronService){
 
@@ -15,7 +15,7 @@ class LocalInstaller implements Installer {
      * @param p package to install
      * @param pls package list service to install in frontend
      */
-    private install(p: Package, pls: PackageListService) {
+    public install(p: Package, pls: PackageListService) {
         pls.addInstalledPackage(p)
     }
 
@@ -41,17 +41,33 @@ class LocalInstaller implements Installer {
      * @param directoryPath path to the directory
      * @param pls package list service running on the fron end, used for adding to on screen list.
      */
-    public installFileFromLocal(directoryPath: string, pls: PackageListService) {
-        this.electron.fs.readdir(directoryPath, (err, files) => {
-            files.forEach(file => {
-                if(path.basename(file) == "package.json"){
-                    fetch('./data.json')
-                        .then((response) => response.json())
-                        .then((json) => this.install(this.createPackage(json.name, 'LOCAL', json.author, json.organisation, false, json.version, json.versions, this.createNodes(json.nodes)), pls));                    
-                }
-            });
+    public async installFileFromLocal(files: FileList, pls: PackageListService) {
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+            let found = false
+
+            if(file.name == "boatloadr-package.json") {
+                found = true
+                
+                let json = JSON.parse(await file.text())
+
+                this.install(this.createPackage(json.name, 'LOCAL', json.author, json.organisation, false, json.version, json.versions, this.createNodes(json.nodes)), pls);
+            }
+
+            if (found == false) {
+                throw new Error('no boatloadr-package.json found')
+            }
+        }
+        // this.electron.fs.readdir(directoryPath, (err, files) => {
+        //     files.forEach(file => {
+        //         if(path.basename(file) == "package.json"){
+        //             fetch('./data.json')
+        //                 .then((response) => response.json())
+        //                 .then((json) => this.install(this.createPackage(json.name, 'LOCAL', json.author, json.organisation, false, json.version, json.versions, this.createNodes(json.nodes)), pls));                    
+        //         }
+        //     });
             
-        })
+        // })
     }
 
     /**

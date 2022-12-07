@@ -1,3 +1,4 @@
+import { PackageListService } from "../package-list.service";
 import { Package } from "./Package";
 
 export interface Installer {
@@ -6,7 +7,7 @@ export interface Installer {
      * This function installs the package
      * @param p package to install
      */
-    install(p: Package)
+    install(p: Package, pls: PackageListService)
 
     /**
      * This function uninstalls the package
