@@ -15,24 +15,44 @@ export class DatabaseHelperService {
   /**
      * Search for a package
      */
-   public async searchPackages (method: 'name' | 'author' | 'organisation' | 'all', query: string): Promise<Array<Package>> {    
-      const response = await lastValueFrom(
-        this.http.get(`https://boatloadr.alexspelt.nl/search/${method}/${query}`) as Observable<string>
-      ) as any as dbResponse[];
+  public async searchPackages (method: 'name' | 'author' | 'organisation' | 'all', query: string): Promise<Array<Package>> {    
+    const response = await lastValueFrom(
+      this.http.get(`https://boatloadr.alexspelt.nl/search/${method}/${query}`) as Observable<string>
+    ) as any as dbResponse[];
 
-      return Promise.all(response.map((val) => this.dbToPackage(val)));
-   }
+    return Promise.all(response.map((val) => this.dbToPackage(val)));
+  }
 
    /**
      * Get all packages
      */
-    public async getAllPackages (): Promise<Array<Package>> {    
-      const response = await lastValueFrom(
-        this.http.get(`https://boatloadr.alexspelt.nl/packages`) as Observable<string>
-      ) as any as dbResponse[];
+  public async getAllPackages (): Promise<Array<Package>> {    
+    const response = await lastValueFrom(
+      this.http.get(`https://boatloadr.alexspelt.nl/packages`) as Observable<string>
+    ) as any as dbResponse[];
 
-      return Promise.all(response.map((val) => this.dbToPackage(val)));
-   }
+    return Promise.all(response.map((val) => this.dbToPackage(val)));
+  }
+
+  /**
+   * this mothed will ask the API to create a package
+   * @param dbRecord object that contains the necessary information to create a package
+   */
+  public async createPackage(dbRecord: dbResponse): Promise<any> {
+      return lastValueFrom(
+        this.http.post('https://boatloadr.alexspelt.nl/package', dbRecord, {responseType: 'text'})
+      );
+  }
+
+  /**
+   * this method will ask the API to remove a package
+   * @param key key of the package to remove
+   */
+  public async removePackage(key: string): Promise<any> {
+    return lastValueFrom(
+      this.http.delete(`https://boatloadr.alexspelt.nl/package/${key}`, {responseType: 'text'})
+    );
+  }
 
    private async dbToPackage(dbPackage: any): Promise<Package> {
 
@@ -63,7 +83,7 @@ export class DatabaseHelperService {
    }
 }
 
-interface dbResponse {
+export interface dbResponse {
   key: string;
   githubRepo?: string;
   filePath?: string;
