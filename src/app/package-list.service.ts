@@ -48,13 +48,13 @@ export class PackageListService {
     let list = []
     this.electron.ipcRenderer.send('read-local-status');
     this.electron.ipcRenderer.on('send-local-status',(event, arg) => {
-      let json = JSON.parse(arg)
+      let json = JSON.parse(arg);
 
       json.forEach(element => {
         let nodes = [];
         element.nodes.forEach(n => {
-          let node = new CommunicationNode(n.isOut, n.type)
-          nodes.push(node)
+          let node = new CommunicationNode(n.isOut, n.type);
+          nodes.push(node);
         });
         let p = new Package(element.name, element.repoURL, element.author, element.organisation, true, element.version, element.versions, nodes);
         list.push(p);
@@ -73,11 +73,11 @@ export class PackageListService {
       if (err) throw err;
       let jsonFile = JSON.parse(data.toString());
 
-      jsonFile.push(p)
+      jsonFile.push(p);
 
-      let jsonData = JSON.stringify(jsonFile)
+      let jsonData = JSON.stringify(jsonFile);
 
-      this.electron.fs.writeFile('./app/src/DB-json/db.json', jsonFile)
+      this.electron.fs.writeFile('./app/src/DB-json/db.json', jsonFile);
     });
     // add to $listInstall
     this.listInstall.push(p);
