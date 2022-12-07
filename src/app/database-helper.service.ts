@@ -15,7 +15,7 @@ export class DatabaseHelperService {
   /**
      * Search for a package
      */
-   public async searchPackages (method: 'name' | 'author' | 'organisation', query: string): Promise<Array<Package>> {    
+   public async searchPackages (method: 'name' | 'author' | 'organisation' | 'all', query: string): Promise<Array<Package>> {    
       const response = await lastValueFrom(
         this.http.get(`https://boatloadr.alexspelt.nl/search/${method}/${query}`) as Observable<string>
       ) as any as dbResponse[];
@@ -35,7 +35,6 @@ export class DatabaseHelperService {
    }
 
    private async dbToPackage(dbPackage: any): Promise<Package> {
-    console.log(dbPackage)
 
     if((!dbPackage.filePath && !dbPackage.githubRepo))
       return undefined;
@@ -49,7 +48,7 @@ export class DatabaseHelperService {
         .catch((err) => { console.log('package ' + dbPackage.key + ' does not excist') });
 
     if(!(dbPackage.filePath === undefined || dbPackage.filePath === null))
-      fileVersionInfo = 'Een versie ofzo'; // TODO package resolver hier zetten.
+      fileVersionInfo = '1.0.0'; // TODO package resolver hier zetten.
 
     return new Package(
       dbPackage.key, 

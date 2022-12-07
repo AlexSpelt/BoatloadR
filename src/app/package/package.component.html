@@ -9,9 +9,24 @@
     <main class="py-3">
         <div class="row">
             <div class="col-6 text-start">
-                <form class="input-group">
+
+                <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                    <input type="radio" class="btn-check" name="btnradio" id="btnradio0" value="all" checked [(ngModel)]="searchRequest.method">
+                    <label class="btn btn-outline-light" for="btnradio0">All</label>
+                    
+                    <input type="radio" class="btn-check" name="btnradio" id="btnradio1" value="name" [(ngModel)]="searchRequest.method">
+                    <label class="btn btn-outline-light" for="btnradio1">Name</label>
+                  
+                    <input type="radio" class="btn-check" name="btnradio" id="btnradio2" value="author" [(ngModel)]="searchRequest.method">
+                    <label class="btn btn-outline-light" for="btnradio2">Author</label>
+                  
+                    <input type="radio" class="btn-check" name="btnradio" id="btnradio3" value="organisation" [(ngModel)]="searchRequest.method">
+                    <label class="btn btn-outline-light" for="btnradio3">Organisation</label>
+                </div>
+
+                <form class="input-group mt-3" (ngSubmit)="searchPackages()">
                     <input class="dark-border form-control bg-dark text-white mr-sm-2" placeholder="Start typing..."
-                           type="search" aria-label="Search">
+                           type="search" aria-label="Search" [(ngModel)]="searchRequest.query" name="query">
                     <button class="btn btn-light px-5" type="submit">Search</button>
                 </form>
             </div>
@@ -64,84 +79,20 @@
                         <th scope="col">#</th>
                         <th scope="col">Package</th>
                         <th scope="col">Version</th>
-                        <th style="width: 10%;" scope="col">Created</th>
-                        <th scope="col">Description</th>
+                        <th scope="col">Author</th>
+                        <th scope="col">Organisation</th>
+                        <th scope="col">Installed</th>
                         <th scope="col">Action</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr>
-                        <th scope="row">1</th>
-                        <td>GPS</td>
-                        <td>1.1</td>
-                        <td>29-11-2022</td>
-                        <td>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque vulputate turpis sit amet
-                            tincidunt convallis. Curabitur vitae turpis nisl. Sed commodo mi at nisi tempor
-                            sollicitudin. Ut vel dolor ac massa cursus faucibus.
-                        </td>
-                        <td>
-                            <div class="btn-group">
-                                <button class="btn btn-sm btn-light me-1 px-4" type="submit">
-                                    <i class="bi bi-pen"></i>
-                                </button>
-                                <button class="btn btn-sm btn-danger px-4" type="submit">
-                                    <i class="bi bi-x-circle"></i>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="2"></td>
-                        <td>1.2</td>
-                        <td>30-11-2022</td>
-                        <td>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque vulputate
-                            turpis sit amet tincidunt convallis. Curabitur vitae turpis nisl. Sed commodo mi at nisi
-                            tempor sollicitudin. Ut vel dolor ac massa cursus faucibus.
-                        </td>
-                        <td>
-                            <div class="btn-group">
-                                <button class="btn btn-sm btn-light me-1 px-4" type="submit">
-                                    <i class="bi bi-pen"></i>
-                                </button>
-                                <button class="btn btn-sm btn-danger px-4" type="submit">
-                                    <i class="bi bi-x-circle"></i>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td colspan="6"></td>
-                    </tr>
-
-                    <tr>
-                        <th scope="row">2</th>
-                        <td>Camera</td>
-                        <td>1.0</td>
-                        <td>25-11-2022</td>
-                        <td>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque vulputate turpis sit amet
-                            tincidunt convallis. Curabitur vitae turpis nisl.
-                        </td>
-                        <td>
-                            <div class="btn-group">
-                                <button class="btn btn-sm btn-light me-1 px-4" type="submit">
-                                    <i class="bi bi-pen"></i>
-                                </button>
-                                <button class="btn btn-sm btn-danger px-4" type="submit">
-                                    <i class="bi bi-x-circle"></i>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <th scope="row">3</th>
-                        <td>Sensor</td>
-                        <td>2.0</td>
-                        <td>20-11-2022</td>
-                        <td>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque vulputate turpis sit amet
-                            tincidunt convallis. Curabitur vitae turpis nisl.
-                        </td>
+                    <tr *ngFor="let package of packageList; index as i">
+                        <th scope="row">{{ i + 1 }}</th>
+                        <td>{{ package.$name }}</td>
+                        <td>{{ package.$version }}</td>
+                        <td>{{ package.$author }}</td>
+                        <td>{{ package.$organisation }}</td>
+                        <td>{{ package.$isInstalled ? 'Yes' : 'No' }}</td>
                         <td>
                             <div class="btn-group">
                                 <button class="btn btn-sm btn-light me-1 px-4" type="submit">
