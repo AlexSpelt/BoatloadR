@@ -70,6 +70,8 @@ export class DatabaseHelperService {
     if(!(dbPackage.filePath === undefined || dbPackage.filePath === null))
       fileVersionInfo = '1.0.0'; // TODO package resolver hier zetten.
 
+    // TODO make shure git versions are integrated. There not right now for some reason. ⚠️
+
     return new Package(
       dbPackage.key, 
       dbPackage.githubRepo, 

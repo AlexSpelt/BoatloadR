@@ -16,7 +16,10 @@ export class PackageComponent implements OnInit {
 
   constructor(private databaseHelper: DatabaseHelperService) {
     this.databaseHelper.getAllPackages()
-      .then(packages => this.packageList = packages)
+      .then(packages => {
+        this.packageList = packages;
+        console.log(this.packageList)
+      })
       .catch(() => this.packageList = []);
   }
 
