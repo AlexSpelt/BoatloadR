@@ -1,0 +1,18 @@
+#drag-area {
+    margin-top: 10px;
+    border: white dashed;
+    background-color: darkgrey;
+}
+
+#draggable-box
+{
+    position: absolute;
+    z-index: 9;
+    border: 2px solid #666;
+    background-color: #ddd;
+    border-radius: .5em;
+    width: 10rem;
+    padding: 10px;
+    cursor: move;
+    user-select: none;
+}
