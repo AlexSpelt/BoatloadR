@@ -1,8 +1,8 @@
 <div class="container-fluid">
     <button class="btn btn-success" (click)="addPackage()">Add package to configuration</button>
-    <div id="drag-area" class="vh-100">
+    <div id="drag-area" class="vh-100 drag-bounds">
         <div *ngFor='let pack of packages'>
-            <div id="draggable-box" draggable="true">{{pack}}</div>
+            <div id="draggable-box" cdkDrag>{{pack}}</div>
         </div>
     </div>
 </div>
