@@ -1,4 +1,4 @@
-import { ComponenentNode } from "./ComponentNode";
+import { CommunicationNode } from "./CommunicationNode";
 
 export class Package {
     
@@ -21,14 +21,14 @@ export class Package {
         private isInstalled: boolean,
         private version: string,
         private versions: Array<string>,
-        private nodes: Array<ComponenentNode>
+        private nodes: Array<CommunicationNode>
     ) { }
 
     /**
      * install code
      */
      public install() {
-        throw new Error("Method not implemented.");
+        
     }
 
     /**
@@ -103,9 +103,17 @@ export class Package {
 
     /**
      * Getter $nodes
-     * @return {Array<ComponenentNode>}
+     * @return {Array<CommunicationNode>}
      */
-	public get $nodes(): Array<ComponenentNode> {
+	public get $nodes(): Array<CommunicationNode> {
 		return this.nodes;
+	}
+
+    /**
+     * Setter $isInstalled
+     * @param {boolean} value
+     */
+	public set $isInstalled(value: boolean) {
+		this.isInstalled = value;
 	}
 }

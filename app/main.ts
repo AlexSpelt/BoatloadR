@@ -18,6 +18,7 @@ function createWindow(): BrowserWindow {
     height: size.height,
     icon: 'app/src/img/boatloadr_nobg.ico',
     webPreferences: {
+      webSecurity: false,
       nodeIntegration: true,
       allowRunningInsecureContent: (serve),
       contextIsolation: false,  // false if you want to run e2e test with Spectron
@@ -85,3 +86,55 @@ try {
   // Catch Error
   // throw e;
 }
+
+// electron API
+
+import { writeFile, readFile } from 'fs/promises';
+import { tmpdir } from 'os';
+
+const electron = require('electron');
+const ipc = electron.ipcMain;
+const shell = electron.shell;
+
+const jsonPath = '/src/DB-json/db.json';
+
+ipc.on('read-local-status', async (event) => {
+  const win = BrowserWindow.fromWebContents(event.sender)
+
+  readFile(jsonPath, 'utf8')
+    .then((contents) => {
+      event.sender.send('send-local-status', contents);
+    }).catch(async () => {
+      await writeFile(jsonPath, JSON.stringify([]));
+      event.sender.send('send-local-status', []);
+    });
+
+})
+
+ipc.on('write-local-status', async (event, args) => {
+  const win = BrowserWindow.fromWebContents(event.sender)
+
+  const newData: string = args[0];
+
+  writeFile(jsonPath, newData).then(() => {
+    event.sender.send('send-local-status', newData);
+  }).catch(async (err) => {
+    console.error('Error writing file', err);
+
+    event.sender.send('error-set-local-status', err.toString());
+  });
+
+})
+
+// this code is responsible for providing an path for the electron app to save the downloaded files
+ipc.on('getFilePath', async (event, args) => {
+  const appPath = app.getPath('userData');
+  const workingFolder = appPath + '/storage';
+
+  // check if folder does not excist, create it
+  if (!fs.existsSync(workingFolder)) {
+    fs.mkdirSync(workingFolder);
+  }
+
+  event.sender.send('filePath', workingFolder);
+})

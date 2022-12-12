@@ -1,5 +1,5 @@
 import { SerialPort } from "electron";
-import { ComponenentNode } from "./ComponentNode";
+import { CommunicationNode } from "./CommunicationNode";
 import { Package } from "./Package";
 
 class Sensor extends Package {
@@ -13,7 +13,7 @@ class Sensor extends Package {
         isInstalled: boolean,
         version: string,
         versions: Array<string>,
-        nodes: Array<ComponenentNode>
+        nodes: Array<CommunicationNode>
     ) {
         super(name,
             repoURL,

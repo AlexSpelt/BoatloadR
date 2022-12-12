@@ -1,0 +1,40 @@
+/* START SCROLLBAR */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #212529;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+/* END SCROLLBAR */
+
+/* START NAVBAR */
+.navbar-bg-darker {
+  background-color: #1d2024;
+}
+/* END NAVBAR */
+
+/* START MAIN ELEMENTS */
+.dark-border {
+  border: 2px solid #373b3e !important;
+}
+
+.color-red {
+  color: #e74c3c;
+}
+/* END MAIN ELEMENTS */
+
+/* START MODAL */
+.modal-header, .modal-footer {
+  border-top: none !important;
+  border-bottom: none !important;
+}
+/* END MODAL */
