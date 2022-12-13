@@ -10,22 +10,17 @@ import { PackageListService } from '../package-list.service';
 })
 export class PackageComponent implements OnInit {
   private localInstaller: LocalInstaller
-  private electronService: ElectronService
 
-  constructor(private packageList: PackageListService) {
-    this.electronService = new ElectronService();
+  constructor(private packageList: PackageListService, private electronService: ElectronService) {
     this.localInstaller = new LocalInstaller(this.electronService);
   }
 
   ngOnInit(): void {
-    let btn = document.getElementById('submitBtn');
-    btn.addEventListener('click', this.handle);
+    
   }
 
   private handle() {
     let dir = document.getElementById('formFile') as HTMLInputElement;
-    console.log(dir.files);
-
     this.localInstaller.installFileFromLocal(dir.files, this.packageList)
   }
 

@@ -72,14 +72,11 @@ export class PackageListService {
   public addInstalledPackage(p: Package) {
     // add to db.json
     this.electron.fs.readFile('./app/src/DB-json/db.json', (err, data) => {
-      if (err) throw err;
       let jsonFile = JSON.parse(data.toString());
-
       jsonFile.push(p);
 
       let jsonData = JSON.stringify(jsonFile);
-
-      this.electron.fs.writeFile('./app/src/DB-json/db.json', jsonFile, {
+      this.electron.fs.writeFile('./app/src/DB-json/db.json', jsonData, {
         encoding: "utf8",
         flag: "w",
         mode: 0o666

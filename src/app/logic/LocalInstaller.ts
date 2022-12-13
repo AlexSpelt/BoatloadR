@@ -7,7 +7,7 @@ import { Package } from "./Package";
 
 export class LocalInstaller implements Installer {
 
-    constructor(private electron: ElectronService){
+    constructor(private electron: ElectronService) {
 
     }
     /**
@@ -31,7 +31,7 @@ export class LocalInstaller implements Installer {
      * @param nodes nodes 
      * @returns 
      */
-    private createPackage(name: string, repoURL: string, author: string, organisation: string, isInstalled: boolean, version: string, versions: Array<string>, nodes: Array<CommunicationNode>): Package{
+    private createPackage(name: string, repoURL: string, author: string, organisation: string, isInstalled: boolean, version: string, versions: Array<string>, nodes: Array<CommunicationNode>): Package {
         let p = new Package(name, repoURL, author, organisation, false, version, versions, nodes)
         return p
     }
@@ -42,32 +42,23 @@ export class LocalInstaller implements Installer {
      * @param pls package list service running on the fron end, used for adding to on screen list.
      */
     public async installFileFromLocal(files: FileList, pls: PackageListService) {
+        let found = false
         for (let i = 0; i < files.length; i++) {
             const file = files[i];
-            let found = false
 
-            if(file.name == "boatloadr-package.json") {
+            if (file.name == "boatloadr-package.json" && file.type) {
                 found = true
+
                 
                 let json = JSON.parse(await file.text())
-
+                
                 this.install(this.createPackage(json.name, 'LOCAL', json.author, json.organisation, false, json.version, json.versions, this.createNodes(json.nodes)), pls);
             }
 
-            if (found == false) {
-                throw new Error('no boatloadr-package.json found')
-            }
         }
-        // this.electron.fs.readdir(directoryPath, (err, files) => {
-        //     files.forEach(file => {
-        //         if(path.basename(file) == "package.json"){
-        //             fetch('./data.json')
-        //                 .then((response) => response.json())
-        //                 .then((json) => this.install(this.createPackage(json.name, 'LOCAL', json.author, json.organisation, false, json.version, json.versions, this.createNodes(json.nodes)), pls));                    
-        //         }
-        //     });
-            
-        // })
+        if (found == false) {
+            throw new Error('no boatloadr-package.json found')
+        }
     }
 
     /**
@@ -100,5 +91,5 @@ export class LocalInstaller implements Installer {
     setRunScript(p: Package) {
         throw new Error("Method not implemented.");
     }
-    
+
 }
