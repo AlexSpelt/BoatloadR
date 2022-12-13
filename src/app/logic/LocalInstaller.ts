@@ -67,12 +67,12 @@ export class LocalInstaller implements Installer {
      * @returns node instance array
      */
     createNodes(nodes: any): CommunicationNode[] {
-        let nArr = []
+        let nodeGroup = []
         nodes.forEach(node => {
             let n = new CommunicationNode(node.isOut, node.type);
-            nArr.push(n);
+            nodeArr.push(n);
         });
-        return nArr;
+        return nodeGroup;
     }
 
 
