@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { ElectronService } from '../core/services';
+import { LocalInstaller } from '../logic/LocalInstaller'; 
+import { PackageListService } from '../package-list.service';
 import { DatabaseHelperService, dbResponse } from '../database-helper.service';
 import { Package } from '../logic/Package';
 
@@ -8,13 +11,18 @@ import { Package } from '../logic/Package';
   styleUrls: ['./package.component.scss']
 })
 export class PackageComponent implements OnInit {
+  private localInstaller: LocalInstaller
 
+  constructor(private packageList: PackageListService, private electronService: ElectronService) {
+    this.localInstaller = new LocalInstaller(this.electronService);
   packageList: Array<Package> = [];
   
   searchRequestForm = new searchQueryForm('', 'all');
   addPackageForm = new createPackageForm('', '', '', '', '');
 
-  constructor(private databaseHelper: DatabaseHelperService) {
+  constructor(private databaseHelper: DatabaseHelperService, private packageList: PackageListService, private electronService: ElectronService) {
+    this.localInstaller = new LocalInstaller(this.electronService);
+  
     this.databaseHelper.getAllPackages()
       .then(packages => {
         this.packageList = packages;
@@ -24,6 +32,12 @@ export class PackageComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    
+  }
+
+  private handle() {
+    let dir = document.getElementById('formFile') as HTMLInputElement;
+    this.localInstaller.installFileFromLocal(dir.files, this.packageList)
   }
 
   searchPackages() {

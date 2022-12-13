@@ -50,7 +50,6 @@
                                     <label for="packageName">Package name</label><br>
                                     <input class="dark-border form-control mt-2 bg-dark text-white" type="text"
                                         id="packageName" name="packageName" placeholder="Package name" [(ngModel)]="addPackageForm.name"><br>
-
                                     <label for="packageName">Author</label><br>
                                     <input class="dark-border form-control mt-2 bg-dark text-white" type="text"
                                         id="author" name="author" placeholder="Author" [(ngModel)]="addPackageForm.author"><br>
@@ -73,7 +72,7 @@
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary px-5" data-bs-dismiss="modal">Close
                                     </button>
-                                    <button type="submit" class="btn btn-success px-5" [ngClass]="{ 'disabled': !formValid }" data-bs-dismiss="modal">Create package</button>
+                                    <button type="submit" class="btn btn-success px-5" [ngClass]="{ 'disabled': !formValid }" data-bs-dismiss="modal" (click)="handle()">Create package</button>
                                 </div>
                             </form>
                         </div>

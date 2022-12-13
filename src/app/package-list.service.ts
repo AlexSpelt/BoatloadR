@@ -4,6 +4,8 @@ import { Package } from './logic/Package';
 import { CommunicationNode } from './logic/CommunicationNode';
 import { Type } from './logic/Type'
 import { ElectronService } from './core/services';
+import { Relation } from './logic/Relation';
+
 import { json } from 'stream/consumers';
 
 @Injectable({
@@ -15,7 +17,7 @@ export class PackageListService {
   private listActive: Array<Package> = [];
   private relations: Array<Relation> = [];
 
-  constructor(private electron: ElectronService, private dbHelper: DBHelperService) { 
+  constructor(private electron: ElectronService, private dbHelper: DBHelperService) {
     this.$listInstall = this.getAllInstalled();
   }
 
@@ -30,9 +32,9 @@ export class PackageListService {
    * @param repoURL URL of the github repository
    * @param versions other versions of the package
    */
-  public createPackage(name: string, version: string, author: string, organisation: string, repoURL: string, versions: Array<string>){
+  public createPackage(name: string, version: string, author: string, organisation: string, repoURL: string, versions: Array<string>) {
     // nodes moet worden gelezen uit de JSON/YAML/XML/markup-flavor van de package. bottom is palceholder code
-    let nodes = [new CommunicationNode(false, Type.coordinate), new CommunicationNode(true, Type.directions)] 
+    let nodes = [new CommunicationNode(false, Type.coordinate), new CommunicationNode(true, Type.directions)]
 
     const p = new Package(name, repoURL, author, organisation, false, version, versions, nodes);
     p.install()
@@ -47,14 +49,14 @@ export class PackageListService {
   private getAllInstalled(): Array<Package> {
     let list = []
     this.electron.ipcRenderer.send('read-local-status');
-    this.electron.ipcRenderer.on('send-local-status',(event, arg) => {
-      let json = JSON.parse(arg)
+    this.electron.ipcRenderer.on('send-local-status', (event, arg) => {
+      let json = JSON.parse(arg);
 
       json.forEach(element => {
         let nodes = [];
         element.nodes.forEach(n => {
-          let node = new CommunicationNode(n.isOut, n.type)
-          nodes.push(node)
+          let node = new CommunicationNode(n.isOut, n.type);
+          nodes.push(node);
         });
         let p = new Package(element.name, element.repoURL, element.author, element.organisation, true, element.version, element.versions, nodes);
         list.push(p);
@@ -70,14 +72,19 @@ export class PackageListService {
   public addInstalledPackage(p: Package) {
     // add to db.json
     this.electron.fs.readFile('./app/src/DB-json/db.json', (err, data) => {
-      if (err) throw err;
       let jsonFile = JSON.parse(data.toString());
+      jsonFile.push(p);
 
-      jsonFile.push(p)
-
-      let jsonData = JSON.stringify(jsonFile)
-
-      this.electron.fs.writeFile('./app/src/DB-json/db.json', jsonFile)
+      let jsonData = JSON.stringify(jsonFile);
+      this.electron.fs.writeFile('./app/src/DB-json/db.json', jsonData, {
+        encoding: "utf8",
+        flag: "w",
+        mode: 0o666
+      },
+        (err) => {
+          if (err)
+            console.log(err);
+        });
     });
     // add to $listInstall
     this.listInstall.push(p);
