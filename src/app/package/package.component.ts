@@ -12,15 +12,12 @@ import { Package } from '../logic/Package';
 })
 export class PackageComponent implements OnInit {
   private localInstaller: LocalInstaller
-
-  constructor(private packageList: PackageListService, private electronService: ElectronService) {
-    this.localInstaller = new LocalInstaller(this.electronService);
-  packageList: Array<Package> = [];
+  private packageList: Array<Package> = [];
   
   searchRequestForm = new searchQueryForm('', 'all');
   addPackageForm = new createPackageForm('', '', '', '', '');
 
-  constructor(private databaseHelper: DatabaseHelperService, private packageList: PackageListService, private electronService: ElectronService) {
+  constructor(private databaseHelper: DatabaseHelperService, private packageListService: PackageListService, private electronService: ElectronService) {
     this.localInstaller = new LocalInstaller(this.electronService);
   
     this.databaseHelper.getAllPackages()
@@ -37,7 +34,7 @@ export class PackageComponent implements OnInit {
 
   private handle() {
     let dir = document.getElementById('formFile') as HTMLInputElement;
-    this.localInstaller.installFileFromLocal(dir.files, this.packageList)
+    this.localInstaller.installFileFromLocal(dir.files, this.packageListService)
   }
 
   searchPackages() {

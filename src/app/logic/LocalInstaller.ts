@@ -70,7 +70,7 @@ export class LocalInstaller implements Installer {
         let nodeGroup = []
         nodes.forEach(node => {
             let n = new CommunicationNode(node.isOut, node.type);
-            nodeArr.push(n);
+            nodeGroup.push(n);
         });
         return nodeGroup;
     }
