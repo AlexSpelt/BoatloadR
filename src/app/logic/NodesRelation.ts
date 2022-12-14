@@ -1,4 +1,4 @@
-class Relation {
+export class NodesRelation {
     /**
      * Constructs a Relation
      * @param publisherNode 

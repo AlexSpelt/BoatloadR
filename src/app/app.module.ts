@@ -19,12 +19,13 @@ import { MainWindowComponent } from './main-window/main-window.component';
 import { PackageComponent } from './package/package.component';
 import { ConnectorComponent } from './connector/connector.component';
 import { BuildsComponent } from './builds/builds.component';
+import { CallbackPipe } from './callback.pipe';
 
 // AoT requires an exported function for factories
 const httpLoaderFactory = (http: HttpClient): TranslateHttpLoader =>  new TranslateHttpLoader(http, './assets/i18n/', '.json');
 
 @NgModule({
-  declarations: [AppComponent, MainWindowComponent, PackageComponent, ConnectorComponent, BuildsComponent],
+  declarations: [AppComponent, MainWindowComponent, PackageComponent, ConnectorComponent, BuildsComponent, CallbackPipe],
   imports: [
     BrowserAnimationsModule,
     BrowserModule,

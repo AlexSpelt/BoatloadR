@@ -1,4 +1,9 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import { CommunicationNode } from '../logic/CommunicationNode';
+import { Package } from '../logic/Package';
+import { Type } from '../logic/Type';
+
+import { NodesRelation } from '../logic/NodesRelation';
 
 @Component({
     selector: 'app-connector',
@@ -6,61 +11,51 @@ import {Component} from '@angular/core';
     styleUrls: ['./connector.component.scss']
 })
 
-export class ConnectorComponent {
-    packages: string[] = [];
+export class ConnectorComponent implements OnInit {
+    packages: Package[] = [];
+    relations: NodesRelation[] = [];
 
-    // current position of the mouse
-    private x: number = 0;
-    private y: number = 0;
-    private ele: HTMLElement;
 
-    constructor() {
-        this.ele = document.getElementById('draggable-box');
-
-        // Checks if an element is available
-        if (this.ele) {
-            this.ele.addEventListener('mousedown', this.mouseDownHandler);
-        } else {
-            console.log('No element available');
-        }
+    constructor() { }
+    
+    ngOnInit(): void {
+        this.addPackage();
     }
 
     public addPackage() {
-        this.packages.push('new package');
+        this.packages.push(new Package('new Package', 'repo_url', 'author', 'organisation', false, '1.0.0', ['1.0.0'], [
+            new CommunicationNode(true, Type.audio),
+            new CommunicationNode(true, Type.audio),
+            new CommunicationNode(false, Type.audio),
+            new CommunicationNode(false, Type.audio)
+        ]));
         console.log(this.packages);
     }
 
-    public mouseDownHandler(e: any) {
-        // Get current mouse position
-        this.x = e.clientX;
-        this.y = e.clientY;
-
-        // Attach listeners to 'document'
-        document.addEventListener('mousemove', this.mouseMoveHandler);
-        document.addEventListener('mouseup', this.mouseUpHandler);
+    public isNodeOut(node: CommunicationNode) {
+        return node.$isOut;
     }
 
-    public mouseMoveHandler(e: any) {
-        // How far the mouse has been moved
-        const dx = e.clientX - this.x;
-        const dy = e.clientY - this.y;
-
-        // Set the position of the element
-        this.ele.style.top = `${this.ele.offsetTop + dy}px`;
-        this.ele.style.left = `${this.ele.offsetLeft + dx}px`;
-
-        // Reassign the position of the mouse
-        this.x = e.clientX;
-        this.y = e.clientY;
-
-        console.log(`X:${dx}, Y:${dy}`);
+    public isNodeIn(node: CommunicationNode) {
+        return !node.$isOut;
     }
 
-    public mouseUpHandler () {
-        // Remove the handlers of 'mousemove' and 'mouseup'
-        document.removeEventListener('mousemove', this.mouseMoveHandler);
-        document.removeEventListener('mouseup', this.mouseUpHandler);
-    }
+    public firstSelectedNode: Node;
+    public position1: { x: number, y: number };
+    public position2: { x: number, y: number };
 
+    public addRelation(node: Node, event: PointerEvent) {
+        if (this.firstSelectedNode) {
+            this.position2 = { x: event.pageX - 10, y: event.pageY - 120 };
+            this.relations.push(new NodesRelation(this.firstSelectedNode, node));
+            
+            this.firstSelectedNode = null;
+            // this.position1 = null;
+            // this.position2 = null;
+        } else {
+            this.firstSelectedNode = node;
+            this.position1 = { x: event.clientX - 10, y: event.clientY - 120 };
+        }
+    }
 
 }

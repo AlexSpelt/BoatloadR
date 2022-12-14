@@ -1,8 +1,27 @@
 <div class="container-fluid">
     <button class="btn btn-success" (click)="addPackage()">Add package to configuration</button>
     <div id="drag-area" class="vh-100 drag-bounds">
-        <div *ngFor='let pack of packages'>
-            <div id="draggable-box" cdkDrag>{{pack}}</div>
+        <div *ngFor='let package of packages'>
+            <div class="draggable-box" cdkDrag>
+                <div *ngFor="let node of package.$nodes | callback:isNodeIn; index as i">
+                    <div 
+                    class="node-left node-selector" 
+                    [ngStyle]="{ 'margin-top': 15 * i + 'px' }" 
+                    [ngClass]="{ 'node-selected': firstSelectedNode == node }"
+                    (click)="addRelation(node, $event)"></div>
+                </div>
+                <div *ngFor="let node of package.$nodes | callback:isNodeOut; index as i">
+                    <div 
+                    class="node-right node-selector" 
+                    [ngStyle]="{ 'margin-top': 15 * i + 'px' }" 
+                    [ngClass]="{ 'node-selected': firstSelectedNode == node }"
+                    (click)="addRelation(node, $event)"></div>
+                </div>
+                {{package.$name}}
+            </div>
         </div>
+        <svg style="position:relative; left:0; top:0;" width="100vw" height="100vh">
+            <line *ngFor="let relation of relations" [attr.x1]="position1.x" [attr.y1]="position1.y" [attr.x2]="position2.x" [attr.y2]="position2.y" stroke="white"/>
+        </svg>
     </div>
 </div>
