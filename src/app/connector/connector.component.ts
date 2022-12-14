@@ -1,10 +1,11 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import { CommunicationNode } from '../logic/CommunicationNode';
 import { Package } from '../logic/Package';
 import { Type } from '../logic/Type';
 
 import { NodesRelation } from '../logic/NodesRelation';
 import { DatabaseHelperService } from '../database-helper.service';
+import { PackageListService } from '../package-list.service';
 
 @Component({
     selector: 'app-connector',
@@ -13,6 +14,8 @@ import { DatabaseHelperService } from '../database-helper.service';
 })
 
 export class ConnectorComponent implements OnInit {
+
+    @ViewChild('dragmenu') drawMenu: ElementRef;
     
     // this variable will hold all possible packages
     packageList: Package[] = [];
@@ -21,24 +24,31 @@ export class ConnectorComponent implements OnInit {
     relations: NodesRelation[] = [];
 
 
-    constructor(private dbService: DatabaseHelperService) { }
+    constructor(private dbService: DatabaseHelperService, private localDbService: PackageListService) { }
     
     ngOnInit(): void {
         this.dbService.getAllPackages()
             .then(remotePackageList => this.packageList = [...this.packageList,  ...remotePackageList])
+
+        this.localDbService.getAllInstalled()
+            .then(localPackageList => this.packageList = [...this.packageList,  ...localPackageList])
     }
 
     public addPackage(insertPackage: Package) {
-        // this.packages.push(new Package('new Package', 'repo_url', 'author', 'organisation', false, '1.0.0', ['1.0.0'], [
-        //     new CommunicationNode(true, Type.audio),
-        //     new CommunicationNode(false, Type.audio),
-        //     new CommunicationNode(false, Type.coordinate),
-        //     new CommunicationNode(true, Type.coordinate),
-        //     new CommunicationNode(false, Type.velocity),
-        //     new CommunicationNode(true, Type.velocity)
-        // ]));
+        const newInstancesOfNodes = insertPackage.$nodes.map((node) => new CommunicationNode(node.$isOut, node.$type));
 
-        this.packages.push(insertPackage);
+        const newInstanceOfPackage = new Package(
+            insertPackage.$name,
+            insertPackage.$repoURL,
+            insertPackage.$author,
+            insertPackage.$organisation,
+            insertPackage.$isInstalled,
+            insertPackage.$version,
+            insertPackage.$versions,
+            newInstancesOfNodes
+        )
+
+        this.packages.push(newInstanceOfPackage);
     }
 
     public isNodeOut(node: CommunicationNode) {
@@ -101,11 +111,17 @@ export class ConnectorComponent implements OnInit {
     }
 
     public getXposFromElement(element : HTMLElement): number {
-        return element.getBoundingClientRect().x - 18;
+        
+        const parentOverflowX = this.drawMenu.nativeElement.scrollLeft;
+
+        return element.getBoundingClientRect().x - 20 + parentOverflowX;
     }
 
     public getYposFromElement(element : HTMLElement): number {
-        return element.getBoundingClientRect().y -75;
+        
+        const parentOverflowY = this.drawMenu.nativeElement.scrollTop;
+
+        return element.getBoundingClientRect().y - 77 + parentOverflowY;
     }
 
     public resolveLineTypeColor(type: Type): string {
