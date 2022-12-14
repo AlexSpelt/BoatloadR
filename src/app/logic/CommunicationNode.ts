@@ -46,4 +46,5 @@ export class CommunicationNode {
     public set $topicNumber(value: number) {
         this.topicNumber = value;
     }
+
 }

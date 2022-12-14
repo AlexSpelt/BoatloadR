@@ -1,3 +1,5 @@
+import { CommunicationNode } from "./CommunicationNode";
+
 export class NodesRelation {
     /**
      * Constructs a Relation
@@ -5,15 +7,17 @@ export class NodesRelation {
      * @param subscriberNode 
      */
     constructor (
-        private publisherNode: Node,
-        private subscriberNode: Node
+        private publisherNode: CommunicationNode,
+        private subscriberNode: CommunicationNode,
+        private publischerElement: HTMLElement,
+        private subscriberElement: HTMLElement
     ) {}
 
     /**
      * This function returns the publisher node
      * @returns publisherNode
      */
-    public getPublisherNode (): Node {
+    public getPublisherNode (): CommunicationNode {
         return this.publisherNode;
     }
 
@@ -21,7 +25,23 @@ export class NodesRelation {
      * This function returns the subscriber node
      * @returns subscriberNode
      */
-    public getSubscriberNode (): Node {
+    public getSubscriberNode (): CommunicationNode {
         return this.subscriberNode;
+    }
+
+    /**
+     * This function returns the publisher node element
+     * @returns publisherNode
+     */
+    public getPublisherElement (): HTMLElement {
+        return this.publischerElement;
+    }
+
+    /**
+     * This function returns the subscriber node Element
+     * @returns subscriberNode
+     */
+    public getSubscriberElement (): HTMLElement {
+        return this.subscriberElement;
     }
 }
