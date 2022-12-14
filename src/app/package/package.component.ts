@@ -23,20 +23,16 @@ export class PackageComponent implements OnInit {
     // get remote packages
     databaseHelper.getAllPackages()
       .then(packages => {
-        this.packageList = packages;
+        this.packageList = [ ...this.packageList, ...packages ];
         console.log(this.packageList)
       })
       .catch(() => this.packageList = []);
 
     // add local packages to the list
     packageListService.getAllInstalled().then(packages => {
-      console.log('aaaaaa----------------------------------------')
       this.packageList = [ ...this.packageList, ...packages ];
     })
     .catch(() => console.error('Die locale tyfus werkt niet.'));
-
-    console.log(packageListService.getAllInstalled())
-
 
   }
 

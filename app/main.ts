@@ -96,7 +96,6 @@ const electron = require('electron');
 const ipc = electron.ipcMain;
 const shell = electron.shell;
 
-const old = './src/DB-json/db.json';
 const jsonPath = './app/src/DB-json/db.json'
 
 ipc.on('read-local-status', async (event) => {
