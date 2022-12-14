@@ -1,15 +1,80 @@
+import * as path from "path";
+import { ElectronService } from "../core/services";
+import { PackageListService } from "../package-list.service";
+import { CommunicationNode } from "./CommunicationNode";
 import { Installer } from "./Installer";
 import { Package } from "./Package";
 
-class LocalInstaller implements Installer {
+export class LocalInstaller implements Installer {
 
+    constructor(private electron: ElectronService) {
+
+    }
     /**
      * This function installs the package
      * @param p package to install
+     * @param pls package list service to install in frontend
      */
-    install(p: Package) {
-        throw new Error("Method not implemented.");
+    public install(p: Package, pls: PackageListService) {
+        pls.addInstalledPackage(p)
     }
+
+    /**
+     * Function to create a package instance from json data
+     * @param name name
+     * @param repoURL 'LOCAL'
+     * @param author author
+     * @param organisation organisation
+     * @param isInstalled if the pacakge is installed
+     * @param version version
+     * @param versions versions
+     * @param nodes nodes 
+     * @returns 
+     */
+    private createPackage(name: string, repoURL: string, author: string, organisation: string, isInstalled: boolean, version: string, versions: Array<string>, nodes: Array<CommunicationNode>): Package {
+        let p = new Package(name, repoURL, author, organisation, false, version, versions, nodes)
+        return p
+    }
+
+    /**
+     * this function is responsible for install a local file
+     * @param directoryPath path to the directory
+     * @param pls package list service running on the fron end, used for adding to on screen list.
+     */
+    public async installFileFromLocal(files: FileList, pls: PackageListService) {
+        let found = false
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+
+            if (file.name == "boatloadr-package.json" && file.type) {
+                found = true
+
+                
+                let json = JSON.parse(await file.text())
+                
+                this.install(this.createPackage(json.name, 'LOCAL', json.author, json.organisation, false, json.version, json.versions, this.createNodes(json.nodes)), pls);
+            }
+
+        }
+        if (found == false) {
+            throw new Error('no boatloadr-package.json found')
+        }
+    }
+
+    /**
+     * this function is responsible for generating nodes based on read json data
+     * @param nodes json data ofnodes
+     * @returns node instance array
+     */
+    createNodes(nodes: any): CommunicationNode[] {
+        let nodeGroup = []
+        nodes.forEach(node => {
+            let n = new CommunicationNode(node.isOut, node.type);
+            nodeGroup.push(n);
+        });
+        return nodeGroup;
+    }
+
 
     /**
      * This function uninstalls the package
@@ -26,5 +91,5 @@ class LocalInstaller implements Installer {
     setRunScript(p: Package) {
         throw new Error("Method not implemented.");
     }
-    
+
 }
