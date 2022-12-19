@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ElectronService } from '../core/services';
-import { LocalInstaller } from '../logic/LocalInstaller'; 
+import { LocalInstaller } from '../logic/LocalInstaller';
 import { PackageListService } from '../package-list.service';
 import { DatabaseHelperService, dbResponse } from '../database-helper.service';
 import { Package } from '../logic/Package';
@@ -13,31 +13,24 @@ import { Package } from '../logic/Package';
 export class PackageComponent implements OnInit {
   private localInstaller: LocalInstaller
   private packageList: Array<Package> = [];
-  
+
   searchRequestForm = new searchQueryForm('', 'all');
   addPackageForm = new createPackageForm('', '', '', '', '');
 
   constructor(private databaseHelper: DatabaseHelperService, private packageListService: PackageListService, private electronService: ElectronService) {
     this.localInstaller = new LocalInstaller(this.electronService);
-  
+
     // get remote packages
     databaseHelper.getAllPackages()
       .then(packages => {
-        this.packageList = [ ...this.packageList, ...packages ];
-        console.log(this.packageList)
-      })
-      .catch(() => this.packageList = []);
+        this.packageList = this.packageList.concat(packages);
+      }).then(packages => this.packageList = this.packageList.concat(this.packageListService.$listInstall))
 
-    // add local packages to the list
-    packageListService.getAllInstalled().then(packages => {
-      this.packageList = [ ...this.packageList, ...packages ];
-    })
-    .catch(() => console.error('Die locale tyfus werkt niet.'));
-
+    
   }
 
   ngOnInit(): void {
-    
+
   }
 
   private handle() {
@@ -46,49 +39,60 @@ export class PackageComponent implements OnInit {
   }
 
   searchPackages() {
-    if(this.searchRequestForm.query === '')
+    this.packageList = []
+    if (this.searchRequestForm.query === '') {
       this.databaseHelper.getAllPackages()
-        .then(packages => this.packageList = packages)
+        .then(packages => { this.packageList = this.packageList.concat(packages) })
         .catch(() => this.packageList = []);
-    else
+
+      this.packageList.concat(this.packageList = this.packageListService.$listInstall)
+    } else {
       this.databaseHelper.searchPackages(
-        this.searchRequestForm.method, 
+        this.searchRequestForm.method,
         this.searchRequestForm.query
       )
-        .then(packages => this.packageList = packages)
-        .catch(() => this.packageList = []);
+        .then(packages => this.packageList = this.packageList.concat(packages))
+
+      let list = this.packageListService.searchPackages(
+        this.searchRequestForm.method,
+        this.searchRequestForm.query
+      )
+
+      this.packageList = this.packageList.concat(list);
+    }
+
   }
 
   addPackage() {
     console.log(this.addPackageForm)
 
     // One of either has to be defined. But not both. (XOR)
-    if((this.addPackageForm.githubRepo && !this.addPackageForm.filePath) || 
+    if ((this.addPackageForm.githubRepo && !this.addPackageForm.filePath) ||
       (!this.addPackageForm.githubRepo && this.addPackageForm.filePath)) {
 
-        const dbRecord: dbResponse = {
-          key: this.addPackageForm.name,
-          organisation: this.addPackageForm.organisation,
-          author: this.addPackageForm.author,
-          githubRepo: this.addPackageForm.githubRepo,
-          filePath: this.addPackageForm.filePath
-        };
+      const dbRecord: dbResponse = {
+        key: this.addPackageForm.name,
+        organisation: this.addPackageForm.organisation,
+        author: this.addPackageForm.author,
+        githubRepo: this.addPackageForm.githubRepo,
+        filePath: this.addPackageForm.filePath
+      };
 
-        this.databaseHelper.createPackage(dbRecord)
-          .then(() => {
-            this.addPackageForm = new createPackageForm('', '', '', '', '');
-            this.searchRequestForm = new searchQueryForm('', 'all');
-            this.searchPackages();
-          })
-          .catch((err) => {
-            alert(`Error while creating package. Error: ${err}`)
-          });
+      this.databaseHelper.createPackage(dbRecord)
+        .then(() => {
+          this.addPackageForm = new createPackageForm('', '', '', '', '');
+          this.searchRequestForm = new searchQueryForm('', 'all');
+          this.searchPackages();
+        })
+        .catch((err) => {
+          alert(`Error while creating package. Error: ${err}`)
+        });
 
     }
   }
 
   removePackage(key: string) {
-    if(confirm(`Are you sure you want to delete ${key}?`))
+    if (confirm(`Are you sure you want to delete ${key}?`))
       this.databaseHelper.removePackage(key)
         .then(() => {
           this.searchPackages();
@@ -105,11 +109,11 @@ export class PackageComponent implements OnInit {
   isFormValid() {
     // check if package add form is filled
     this.formValid = (
-      this.addPackageForm.name !== '' && 
-      this.addPackageForm.author !== '' && 
+      this.addPackageForm.name !== '' &&
+      this.addPackageForm.author !== '' &&
       this.addPackageForm.organisation !== '' &&
-      !!((this.addPackageForm.githubRepo && !this.addPackageForm.filePath) || 
-      (!this.addPackageForm.githubRepo && this.addPackageForm.filePath))
+      !!((this.addPackageForm.githubRepo && !this.addPackageForm.filePath) ||
+        (!this.addPackageForm.githubRepo && this.addPackageForm.filePath))
     )
   }
 
@@ -119,7 +123,7 @@ class searchQueryForm {
   constructor(
     public query: string,
     public method: 'name' | 'author' | 'organisation' | 'all'
-  ) {}
+  ) { }
 }
 
 class createPackageForm {
@@ -129,5 +133,5 @@ class createPackageForm {
     public organisation: string,
     public githubRepo: string,
     public filePath: string
-  ) {}
+  ) { }
 }
