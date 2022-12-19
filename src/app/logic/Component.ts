@@ -1,7 +1,7 @@
 import { CommunicationNode } from "./CommunicationNode";
 import { Package } from "./Package";
 
-class Component extends Package {
+export class Component extends Package {
     constructor (
         name: string,
         repoURL: string,

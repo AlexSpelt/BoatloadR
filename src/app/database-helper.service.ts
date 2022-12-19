@@ -4,6 +4,7 @@ import { lastValueFrom, Observable } from 'rxjs';
 import { GithubHelperService } from './github-helper.service';
 import { GithubVersion } from './logic/GithubVersion';
 import { Package } from './logic/Package';
+import { Component } from './logic/Component';
 
 @Injectable({
   providedIn: 'root'
@@ -83,6 +84,17 @@ export class DatabaseHelperService {
       []
     );
    }
+
+    /**
+     * Get all builds
+     */
+    public async getAllBuilds (): Promise<Array<Component>> {
+        const response = await lastValueFrom(
+            this.http.get(`https://boatloadr.alexspelt.nl/builds`) as Observable<string>
+        ) as any as dbResponse[];
+
+        return Promise.all(response.map((val) => this.dbToPackage(val)));
+    }
 }
 
 export interface dbResponse {
