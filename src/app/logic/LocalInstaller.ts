@@ -5,7 +5,7 @@ import { CommunicationNode } from "./CommunicationNode";
 import { Installer } from "./Installer";
 import { Package } from "./Package";
 import { dir } from "console";
-import { exec, exec } from "child_process";
+import { exec } from "child_process";
 
 export class LocalInstaller implements Installer {
 
@@ -64,27 +64,6 @@ export class LocalInstaller implements Installer {
         if (found == false) {
             throw new Error('no boatloadr-package.json found')
         } else {
-            // move files to installed package folder or add to enviroment ofzo folder
-
-            // ROS install manier
-            // files need to go to src folder
-            // colcon build in the folder above the src flder
-            // re-source the setup.bash file
-            // validate  install
-
-            // take all files and store them in a temp/src folder (can this be temp?)
-            // build the temp folder using colcon build
-            // source ~/ros2_ws/install/setup.bash, on start make sure this is the soure file being used?
-            // ros2 pkg prefix [package name ] or something to validate
-
-            // create folder with package name in package folder
-            // add src folder
-            // copy dir contents to src folder
-            // source ros to be sure, allowed ton throw error i geuss
-            // package name folder -> colcon build
-            // source ros again
-            // ros2 pkg prefix [package name ] or something to validate
-
             let dirPath = "./src/assets/package-folder/";
 
             let createDirs = dirPath + pkgname + '/src'
@@ -96,8 +75,12 @@ export class LocalInstaller implements Installer {
             }
 
             // fix this
-            this.electron.fs.copyFileSync(files, createDirs, { overwrite: true })
 
+            for (let index = 0; index < files.length; index++) {
+                const file = files[index];
+                this.electron.fs.copyFileSync(file.path.toString(), createDirs)
+            }
+            
             exec('source ~/ros2_ws/install/setup.bash')
 
             exec('colcon build', {
