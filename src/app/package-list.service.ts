@@ -7,18 +7,21 @@ import { ElectronService } from './core/services';
 import { Relation } from './logic/Relation';
 
 import { json } from 'stream/consumers';
+import { on } from 'events';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PackageListService {
   private readonly serverURL: string = 'https://BoatLoadR.alexspelt.nl';
-  private listInstall: Array<Package> = this.getAllInstalled();
+  private listInstall: Array<Package> = [];
   private listActive: Array<Package> = [];
   private relations: Array<Relation> = [];
 
   constructor(private electron: ElectronService, private dbHelper: DBHelperService) {
-    this.$listInstall = this.getAllInstalled();
+    this.getAllInstalled().then((packages) => {
+      this.$listInstall = packages;
+    });
   }
 
   /**
@@ -46,23 +49,29 @@ export class PackageListService {
    * Gets all installed packages to initialize the installed list array
    * @returns list of all installed packages
    */
-  private getAllInstalled(): Array<Package> {
-    let list = []
-    this.electron.ipcRenderer.send('read-local-status');
-    this.electron.ipcRenderer.on('send-local-status', (event, arg) => {
-      let json = JSON.parse(arg);
+  public getAllInstalled(): Promise<Package[]> {
+    return new Promise((resolve) => {
+      let list = []
 
-      json.forEach(element => {
-        let nodes = [];
-        element.nodes.forEach(n => {
-          let node = new CommunicationNode(n.isOut, n.type);
-          nodes.push(node);
+      this.electron.ipcRenderer.send('read-local-status');
+      this.electron.ipcRenderer.on('send-local-status', (event, arg) => {
+        let json = JSON.parse(arg);
+
+        json.forEach((element, i) => {
+          let nodes = [];
+          element.nodes.forEach(n => {
+            let node = new CommunicationNode(n.isOut, n.type);
+            nodes.push(node);
+          });
+          let p = new Package(element.name, element.repoURL, element.author, element.organisation, true, element.version, element.versions, nodes);
+          list.push(p);
+
+          if (i == json.length - 1) {
+            resolve(list);
+          } 
         });
-        let p = new Package(element.name, element.repoURL, element.author, element.organisation, true, element.version, element.versions, nodes);
-        list.push(p);
       });
     });
-    return list;
   }
 
   /**
@@ -93,6 +102,51 @@ export class PackageListService {
   }
 
   /**
+   * This function is responsible for filtering in the list
+   * @param method search method
+   * @param query string to filter on
+   * @returns packages that fit filter
+   */
+  public searchPackages(method: 'name' | 'author' | 'organisation' | 'all', query: string): Array<Package> {
+    const filterList: Package[] = []
+
+    switch (method) {
+      case 'name':
+        this.listInstall.filter(function (el) {
+          if (el.$name.includes(query)) {
+            filterList.push(el);
+          }
+        })
+      case 'author':
+        this.listInstall.filter(function (el) {
+          if (el.$author.includes(query)) {
+            filterList.push(el);
+          }
+        })
+      case 'organisation':
+        console.log('ja ik kom hier')
+        this.listInstall.filter(function (el) {
+          if (el.$organisation.includes(query)) {
+            filterList.push(el);
+          }
+        })
+      case 'all':
+        this.listInstall.filter(function (el) {
+          // sorry voor die nodes filter, -Gianni
+          if (el.$name.includes(query) || 
+            el.$author.includes(query) || 
+            el.$organisation.includes(query) || 
+            el.$nodes.filter(function (n) { n.$type.toString().includes(query) })) {
+              filterList.push(el);
+          }
+        })
+    }
+
+    console.log("filterlist: ", filterList);
+    return filterList;
+  }
+
+  /** 
    * Remover for the install list
    * @param p Package to remove from the installed list
    */

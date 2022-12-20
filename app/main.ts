@@ -96,7 +96,7 @@ const electron = require('electron');
 const ipc = electron.ipcMain;
 const shell = electron.shell;
 
-const jsonPath = '/src/DB-json/db.json';
+const jsonPath = './app/src/DB-json/db.json'
 
 ipc.on('read-local-status', async (event) => {
   const win = BrowserWindow.fromWebContents(event.sender)
@@ -105,7 +105,9 @@ ipc.on('read-local-status', async (event) => {
     .then((contents) => {
       event.sender.send('send-local-status', contents);
     }).catch(async () => {
-      await writeFile(jsonPath, JSON.stringify([]));
+      await writeFile(jsonPath, JSON.stringify([])).catch((err) => {
+        console.log(err)
+      });
       event.sender.send('send-local-status', []);
     });
 
