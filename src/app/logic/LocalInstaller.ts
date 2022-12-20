@@ -4,6 +4,8 @@ import { PackageListService } from "../package-list.service";
 import { CommunicationNode } from "./CommunicationNode";
 import { Installer } from "./Installer";
 import { Package } from "./Package";
+import { dir } from "console";
+import { exec, exec } from "child_process";
 
 export class LocalInstaller implements Installer {
 
@@ -22,14 +24,14 @@ export class LocalInstaller implements Installer {
     /**
      * Function to create a package instance from json data
      * @param name name
-     * @param repoURL 'LOCAL'
+     * @param repoURL file path on system
      * @param author author
      * @param organisation organisation
      * @param isInstalled if the pacakge is installed
      * @param version version
      * @param versions versions
      * @param nodes nodes 
-     * @returns 
+     * @returns Package
      */
     private createPackage(name: string, repoURL: string, author: string, organisation: string, isInstalled: boolean, version: string, versions: Array<string>, nodes: Array<CommunicationNode>): Package {
         let p = new Package(name, repoURL, author, organisation, false, version, versions, nodes)
@@ -37,27 +39,92 @@ export class LocalInstaller implements Installer {
     }
 
     /**
-     * this function is responsible for install a local file
+     * this function is responsible for install a local file including putting the files in the correct folder
      * @param directoryPath path to the directory
      * @param pls package list service running on the fron end, used for adding to on screen list.
      */
     public async installFileFromLocal(files: FileList, pls: PackageListService) {
-        let found = false
+        let found = false;
+        let pkgname: string;
         for (let i = 0; i < files.length; i++) {
             const file = files[i];
 
             if (file.name == "boatloadr-package.json" && file.type) {
-                found = true
+                found = true;
 
-                
-                let json = JSON.parse(await file.text())
-                
-                this.install(this.createPackage(json.name, 'LOCAL', json.author, json.organisation, false, json.version, json.versions, this.createNodes(json.nodes)), pls);
+                let json = JSON.parse(await file.text());
+
+                pkgname = json.name;
+
+                // TODO: local to filepath unless the file is in the ros source? distribution wise mqtt would have been better than ros :/
+                this.install(this.createPackage(json.name, 'LOCAL', json.author, json.organisation, true, json.version, json.versions, this.createNodes(json.nodes)), pls);
             }
 
         }
         if (found == false) {
             throw new Error('no boatloadr-package.json found')
+        } else {
+            // move files to installed package folder or add to enviroment ofzo folder
+
+            // ROS install manier
+            // files need to go to src folder
+            // colcon build in the folder above the src flder
+            // re-source the setup.bash file
+            // validate  install
+
+            // take all files and store them in a temp/src folder (can this be temp?)
+            // build the temp folder using colcon build
+            // source ~/ros2_ws/install/setup.bash, on start make sure this is the soure file being used?
+            // ros2 pkg prefix [package name ] or something to validate
+
+            // create folder with package name in package folder
+            // add src folder
+            // copy dir contents to src folder
+            // source ros to be sure, allowed ton throw error i geuss
+            // package name folder -> colcon build
+            // source ros again
+            // ros2 pkg prefix [package name ] or something to validate
+
+            let dirPath = "./src/assets/package-folder/";
+
+            let createDirs = dirPath + pkgname + '/src'
+
+            let dirs = dirPath + pkgname
+
+            if (!this.electron.fs.existsSync(createDirs)) {
+                this.electron.fs.mkdirSync(createDirs, { recursive: true });
+            }
+
+            // fix this
+            this.electron.fs.copyFileSync(files, createDirs, { overwrite: true })
+
+            exec('source ~/ros2_ws/install/setup.bash')
+
+            exec('colcon build', {
+                cwd: dirs
+            }, function (error, stdout, stderr) {
+                if (error) {
+                    console.error('ERROR:', error)
+                } else if (stderr) {
+                    console.error('STDERROR:', stderr)
+                } else {
+                    console.log('out:', stdout)
+                }
+            });
+
+            exec('source ~/ros2_ws/install/setup.bash')
+
+            exec('ros2 pkg prefix ' + pkgname, {
+                cwd: dirs
+            }, function (error, stdout, stderr) {
+                if (error) {
+                    console.error('ERROR:', error)
+                } else if (stderr) {
+                    console.error('STDERROR:', stderr)
+                } else {
+                    console.log('out:', stdout)
+                }
+            });
         }
     }
 
