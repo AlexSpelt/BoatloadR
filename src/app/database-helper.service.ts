@@ -90,7 +90,8 @@ export class DatabaseHelperService {
      */
     public async getAllBuilds (): Promise<Array<Component>> {
         const response = await lastValueFrom(
-            this.http.get(`https://boatloadr.alexspelt.nl/builds`) as Observable<string>
+            // TODO change URL to builds when available in API
+            this.http.get(`https://boatloadr.alexspelt.nl/packages`) as Observable<string>
         ) as any as dbResponse[];
 
         return Promise.all(response.map((val) => this.dbToPackage(val)));
