@@ -1,0 +1,34 @@
+[
+    {
+        "name": "directions-to-coordinates",
+        "repoURL": "https://github.com/repo/repo",
+        "author": "eind-gebruiker",
+        "organisation": "HZ University of extreme verwarring",
+        "nodes": [
+            {
+                "isOut": true,
+                "type": "directions"
+            },
+            {
+                "isOut": false,
+                "type": "coordinates"
+            }
+        ]
+    },
+    {
+        "name": "coordiantes-to-directions",
+        "repoURL": "https://github.com/repo/other-repo",
+        "author": "voor-gebruiker",
+        "organisation": "HZ University of extreme verwarring",
+        "nodes": [
+            {
+                "isOut": true,
+                "type": "directions"
+            },
+            {
+                "isOut": false,
+                "type": "coordinates"
+            }
+        ]
+    }
+]

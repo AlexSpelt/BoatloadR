@@ -96,7 +96,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr *ngFor="let package of packageList; index as i">
+                    <tr *ngFor="let package of $packageList; index as i">
                         <th scope="row">{{ i + 1 }}</th>
                         <td>{{ package.$name }}</td>
                         <td>{{ package.$version }}</td>

@@ -6,9 +6,6 @@ import { Type } from './logic/Type'
 import { ElectronService } from './core/services';
 import { Relation } from './logic/Relation';
 
-import { json } from 'stream/consumers';
-import { on } from 'events';
-
 @Injectable({
   providedIn: 'root'
 })

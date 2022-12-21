@@ -104,5 +104,8 @@
   },
   "browserslist": [
     "chrome 100"
-  ]
+  ],
+  "browser": {
+    "child_process": false
+  }
 }

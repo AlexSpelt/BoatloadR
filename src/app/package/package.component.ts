@@ -33,7 +33,7 @@ export class PackageComponent implements OnInit {
 
   }
 
-  private handle() {
+  public handle() {
     let dir = document.getElementById('formFile') as HTMLInputElement;
     this.localInstaller.installFileFromLocal(dir.files, this.packageListService)
   }
@@ -109,13 +109,23 @@ export class PackageComponent implements OnInit {
   isFormValid() {
     // check if package add form is filled
     this.formValid = (
-      this.addPackageForm.name !== '' &&
+      !!((this.addPackageForm.githubRepo && (this.addPackageForm.name !== '' &&
       this.addPackageForm.author !== '' &&
-      this.addPackageForm.organisation !== '' &&
-      !!((this.addPackageForm.githubRepo && !this.addPackageForm.filePath) ||
-        (!this.addPackageForm.githubRepo && this.addPackageForm.filePath))
+      this.addPackageForm.organisation !== '') && !this.addPackageForm.filePath) ||
+        (!this.addPackageForm.githubRepo && !(this.addPackageForm.name !== '' &&
+        this.addPackageForm.author !== '' &&
+        this.addPackageForm.organisation !== '') && this.addPackageForm.filePath))
     )
   }
+
+
+  /**
+    * Getter $packageList
+    * @return {Array<Package> }
+    */
+	public get $packageList(): Array<Package>  {
+		return this.packageList;
+	}
 
 }
 

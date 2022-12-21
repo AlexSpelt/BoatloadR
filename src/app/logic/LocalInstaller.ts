@@ -75,6 +75,7 @@ export class LocalInstaller implements Installer {
             }
 
             // fix this
+            //TODO: Hier gaat het mis
 
             for (let index = 0; index < files.length; index++) {
                 const file = files[index];
@@ -93,6 +94,7 @@ export class LocalInstaller implements Installer {
                 } else {
                     console.log('out:', stdout)
                 }
+                console.log(stdout)
             });
 
             exec('source ~/ros2_ws/install/setup.bash')
@@ -107,6 +109,7 @@ export class LocalInstaller implements Installer {
                 } else {
                     console.log('out:', stdout)
                 }
+                console.log(stdout)
             });
         }
     }
