@@ -82,14 +82,7 @@ export class DatabaseHelperService {
       false,
       fileVersionInfo ?? githubVersionInfo[0].$version,
       [fileVersionInfo] ?? githubVersionInfo.map(versionInfo => versionInfo.$version),
-      [
-        new CommunicationNode(true, Type.audio),
-        new CommunicationNode(false, Type.audio),
-        new CommunicationNode(false, Type.coordinate),
-        new CommunicationNode(true, Type.coordinate),
-        new CommunicationNode(false, Type.velocity),
-        new CommunicationNode(true, Type.velocity)
-      ]
+      dbPackage.nodes.map((node) => new CommunicationNode(node.isOut, node.type))
     );
    }
 }
@@ -100,4 +93,5 @@ export interface dbResponse {
   filePath?: string;
   author: string;
   organisation: string;
+  nodes: Array<{isOut: boolean, type: Type}>;
 }

@@ -6,8 +6,8 @@
     width: calc(100% - 300px);
     display: inline-block;
     margin-left: 10px;
-    overflow-x: scroll !important;
-    overflow-y: scroll !important;
+    overflow-x: hidden !important;
+    overflow-y: hidden !important;
 }
 
 #side-menu {
@@ -17,8 +17,7 @@
     margin-top: 10px;
 }
 
-.draggable-box
-{
+.draggable-box {
     position: relative;
     z-index: 9;
     border: 1px solid #666;

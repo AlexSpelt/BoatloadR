@@ -36,7 +36,7 @@
             </div>
             
         </div>
-        <div id="side-menu">
+        <div id="side-menu" style="overflow-y: scroll; height: calc(100vh - 140px);">
             <div class="row" *ngFor="let package of packageList">
                 <div class="col-12 mb-3 ml-1">
                     <div class="p-2 border rounded" style="border-style: dashed !important; border-width: 2px !important; border-color: gray !important;">
@@ -52,4 +52,6 @@
             </div>
         </div>
     </div>
+    <button class="m-1 btn btn-success disabled">Save Build</button>
+    <button class="m-1 btn btn-danger" (click)="reload()">Reset</button>
 </div>

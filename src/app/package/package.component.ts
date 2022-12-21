@@ -75,7 +75,8 @@ export class PackageComponent implements OnInit {
         organisation: this.addPackageForm.organisation,
         author: this.addPackageForm.author,
         githubRepo: this.addPackageForm.githubRepo,
-        filePath: this.addPackageForm.filePath
+        filePath: this.addPackageForm.filePath,
+        nodes: []
       };
 
       this.databaseHelper.createPackage(dbRecord)

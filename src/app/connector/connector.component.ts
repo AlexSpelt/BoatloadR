@@ -108,6 +108,8 @@ export class ConnectorComponent implements OnInit {
             this.firstSelectedNode = node;
             this.firstSelectedNodeElement = event.target as HTMLElement;
         }
+
+        console.table(this.relations)
     }
 
     public getXposFromElement(element : HTMLElement): number {
@@ -145,6 +147,10 @@ export class ConnectorComponent implements OnInit {
             default:
                 return 'white';
         }
+    }
+
+    public reload() {
+        location.reload()
     }
 
 }
