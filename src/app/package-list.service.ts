@@ -4,10 +4,10 @@ import { Package } from './logic/Package';
 import { CommunicationNode } from './logic/CommunicationNode';
 import { Type } from './logic/Type'
 import { ElectronService } from './core/services';
-import { Relation } from './logic/Relation';
 
 import { json } from 'stream/consumers';
 import { on } from 'events';
+import { NodesRelation } from './logic/NodesRelation';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +16,7 @@ export class PackageListService {
   private readonly serverURL: string = 'https://BoatLoadR.alexspelt.nl';
   private listInstall: Array<Package> = [];
   private listActive: Array<Package> = [];
-  private relations: Array<Relation> = [];
+  private relations: Array<NodesRelation> = [];
 
   constructor(private electron: ElectronService, private dbHelper: DBHelperService) {
     this.getAllInstalled().then((packages) => {
@@ -174,7 +174,7 @@ export class PackageListService {
    * Adder for the relations
    * @param relation Relation to be added to the list
    */
-  public addRelation(relation: Relation) {
+  public addRelation(relation: NodesRelation) {
     this.relations.push(relation);
   }
 
@@ -182,7 +182,7 @@ export class PackageListService {
    * Remover for the relations
    * @param relation Relation to be removed from the list
    */
-  public removeRelation(relation: Relation) {
+  public removeRelation(relation: NodesRelation) {
     this.relations.splice(this.relations.indexOf(relation), 1)
   }
 
@@ -214,7 +214,7 @@ export class PackageListService {
    * Getter $relations
    * @return {Array<Relation>}
    */
-  public get $relations(): Array<Relation> {
+  public get $relations(): Array<NodesRelation> {
     return this.relations;
   }
 
@@ -238,7 +238,7 @@ export class PackageListService {
    * Setter $relations
    * @param {Array<Relation>} value
    */
-  private set $relations(value: Array<Relation>) {
+  private set $relations(value: Array<NodesRelation>) {
     this.relations = value;
   }
 }

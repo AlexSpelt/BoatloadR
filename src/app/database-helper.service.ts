@@ -2,8 +2,10 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { lastValueFrom, Observable } from 'rxjs';
 import { GithubHelperService } from './github-helper.service';
+import { CommunicationNode } from './logic/CommunicationNode';
 import { GithubVersion } from './logic/GithubVersion';
 import { Package } from './logic/Package';
+import { Type } from './logic/Type';
 
 @Injectable({
   providedIn: 'root'
@@ -80,7 +82,7 @@ export class DatabaseHelperService {
       false,
       fileVersionInfo ?? githubVersionInfo[0].$version,
       [fileVersionInfo] ?? githubVersionInfo.map(versionInfo => versionInfo.$version),
-      []
+      dbPackage.nodes.map((node) => new CommunicationNode(node.isOut, node.type))
     );
    }
 }
@@ -91,4 +93,5 @@ export interface dbResponse {
   filePath?: string;
   author: string;
   organisation: string;
+  nodes: Array<{isOut: boolean, type: Type}>;
 }

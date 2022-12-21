@@ -1,0 +1,59 @@
+#drag-area {
+    margin-top: 10px;
+    border: rgba(255, 255, 255, 0.25) dashed;
+    background-color: var(--bs-dark);
+    height: calc(100vh - 140px); 
+    width: calc(100% - 300px);
+    display: inline-block;
+    margin-left: 10px;
+    overflow-x: hidden !important;
+    overflow-y: hidden !important;
+}
+
+#side-menu {
+    width: 280px;
+    color: white;
+    display: inline-block;
+    margin-top: 10px;
+}
+
+.draggable-box {
+    position: relative;
+    z-index: 9;
+    border: 1px solid #666;
+    background-color: rgba(255, 255, 255, 0.05);
+    color: #ddd;
+    border-radius: .5em;
+    width: 10rem;
+    padding: 10px;
+    cursor: move;
+    user-select: none;
+    margin-left: 100px;
+}
+
+.node-left {
+    left: -22px;
+}
+
+.node-right {
+    right: -20px;
+}
+
+.node-selected {
+    border-width: 5px !important;
+    transform: scale(1.2);
+}
+
+.node-selector {
+    position: absolute;
+    background-color: rgba(255, 255, 255, 0.05);
+    height: 10px;
+    width: 10px;
+    border-radius: 2px;
+    border: 1px solid #666;
+}
+
+.node-selector:hover {
+    background-color: #ddd;
+    cursor: pointer;
+}

@@ -1,1 +1,57 @@
-<p>connector works!</p>
+<div class="container-fluid">
+    <div class="row">
+        <div id="drag-area" class="drag-bounds" #dragmenu>
+            <!-- TODO figure out how to increase height without loosing svg draw distance -->
+            <svg style="position:relative; left:0; top:0;" width="100%" height="100vh">
+                <line 
+                    *ngFor="let relation of relations" 
+                    [attr.x1]="getXposFromElement(relation.getPublisherElement())" 
+                    [attr.y1]="getYposFromElement(relation.getPublisherElement())" 
+                    [attr.x2]="getXposFromElement(relation.getSubscriberElement())" 
+                    [attr.y2]="getYposFromElement(relation.getSubscriberElement())" 
+                    [attr.stroke]="resolveLineTypeColor(relation.getPublisherNode().$type)"
+                    stroke-width="4" stroke-linecap="round"/>
+            </svg>
+
+            <div style="position:relative; top: calc(-100vh + 50px); left:0">
+                <div *ngFor='let package of packages; index as j'>
+                    <div class="draggable-box" cdkDrag>
+                        <div *ngFor="let node of package.$nodes | callback:isNodeIn; index as i">
+                            <div 
+                            class="node-left node-selector" 
+                            [ngStyle]="{ 'margin-top': 15 * i + 'px', 'border-color': resolveLineTypeColor(node.type) }" 
+                            [ngClass]="{ 'node-selected': firstSelectedNode == node }"
+                            (click)="addRelation(node, $event)"></div>
+                        </div>
+                        <div *ngFor="let node of package.$nodes | callback:isNodeOut; index as i">
+                            <div 
+                            class="node-right node-selector" 
+                            [ngStyle]="{ 'margin-top': 15 * i + 'px', 'border-color': resolveLineTypeColor(node.type) }" 
+                            [ngClass]="{ 'node-selected': firstSelectedNode == node }"
+                            (click)="addRelation(node, $event)"></div>
+                        </div>
+                        {{package.$name}}
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+        <div id="side-menu" style="overflow-y: scroll; height: calc(100vh - 140px);">
+            <div class="row" *ngFor="let package of packageList">
+                <div class="col-12 mb-3 ml-1">
+                    <div class="p-2 border rounded" style="border-style: dashed !important; border-width: 2px !important; border-color: gray !important;">
+                        <h5>{{ package.$name }} <span class="bandge bg-light rounded text-dark float-end" style="padding: 0.2em; font-size: 12px;" >{{ package.$version }}</span></h5>
+                        <p>
+                            <small>{{ package.$author }} | {{ package.$organisation }}</small><br>
+                            <small>{{ package.$isInstalled ? 'this package is installed' : 'this package is not installed' }}</small>
+                        </p>
+
+                        <button class="btn btn-success btn-sm" (click)="addPackage(package)">Add {{ package.$name }}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <button class="m-1 btn btn-success disabled">Save Build</button>
+    <button class="m-1 btn btn-danger" (click)="reload()">Reset</button>
+</div>
