@@ -9,8 +9,8 @@ export class NodesRelation {
     constructor (
         private publisherNode: CommunicationNode,
         private subscriberNode: CommunicationNode,
-        private publischerElement: HTMLElement,
-        private subscriberElement: HTMLElement
+        private publischerElement?: HTMLElement,
+        private subscriberElement?: HTMLElement
     ) {}
 
     /**
