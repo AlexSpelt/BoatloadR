@@ -28,10 +28,15 @@ export class ConnectorComponent implements OnInit {
     
     ngOnInit(): void {
         this.dbService.getAllPackages()
-            .then(remotePackageList => this.packageList = [...this.packageList,  ...remotePackageList])
+            .then(remotePackageList => this.packageList = [...this.packageList,  ...remotePackageList])      
 
-        this.localDbService.getAllInstalled()
-            .then(localPackageList => this.packageList = [...this.packageList,  ...localPackageList])
+            // @ts-ignore
+            if(this.localDbService.$listInstall.length == 0)
+                // @ts-ignore
+                this.localDbService.getAllInstalled()
+                    .then(localPackageList => this.packageList = [...this.packageList,  ...localPackageList]);
+            else
+                this.packageList = [...this.packageList,  ...this.localDbService.$listInstall]
     }
 
     public addPackage(insertPackage: Package) {
