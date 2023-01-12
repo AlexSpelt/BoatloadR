@@ -1,11 +1,10 @@
 {
-  "name": "angular-electron",
-  "description": "Angular Electron sample",
+  "name": "boatloadr",
+  "description": "Ros2 package management system",
   "author": {
-    "name": "Maxime GRIS",
-    "email": "maxime.gris@gmail.com"
+    "name": "BoatLoadR"
   },
-  "version": "11.2.0",
+  "version": "1.0.0",
   "main": "main.js",
   "private": true,
   "dependencies": {

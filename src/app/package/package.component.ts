@@ -12,7 +12,7 @@ import { Package } from '../logic/Package';
 })
 export class PackageComponent implements OnInit {
   private localInstaller: LocalInstaller
-  private packageList: Array<Package> = [];
+  public packageList: Array<Package> = [];
 
   searchRequestForm = new searchQueryForm('', 'all');
   addPackageForm = new createPackageForm('', '', '', '', '');
@@ -33,7 +33,7 @@ export class PackageComponent implements OnInit {
 
   }
 
-  private handle() {
+  public handle() {
     let dir = document.getElementById('formFile') as HTMLInputElement;
     this.localInstaller.installFileFromLocal(dir.files, this.packageListService)
   }
