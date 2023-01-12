@@ -136,8 +136,7 @@ export class PackageListService {
           // sorry voor die nodes filter, -Gianni
           if (el.$name.includes(query) || 
             el.$author.includes(query) || 
-            el.$organisation.includes(query) || 
-            el.$nodes.filter(function (n) { n.$type.toString().includes(query) })) {
+            el.$organisation.includes(query)) {
               filterList.push(el);
           }
         })

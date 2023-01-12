@@ -47,18 +47,22 @@ export class PackageComponent implements OnInit {
 
       this.packageList.concat(this.packageList = this.packageListService.$listInstall)
     } else {
-      this.databaseHelper.searchPackages(
-        this.searchRequestForm.method,
-        this.searchRequestForm.query
-      )
-        .then(packages => this.packageList = this.packageList.concat(packages))
-
+      // local
       let list = this.packageListService.searchPackages(
         this.searchRequestForm.method,
         this.searchRequestForm.query
       )
 
-      this.packageList = this.packageList.concat(list);
+      this.packageList = list;
+
+      console.log(list)
+
+      // remote
+      this.databaseHelper.searchPackages(
+        this.searchRequestForm.method,
+        this.searchRequestForm.query
+      )
+      .then(packages => this.packageList = this.packageList.concat(packages))
     }
 
   }
