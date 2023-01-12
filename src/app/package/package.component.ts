@@ -24,7 +24,7 @@ export class PackageComponent implements OnInit {
     databaseHelper.getAllPackages()
       .then(packages => {
         this.packageList = this.packageList.concat(packages);
-      }).then(packages => this.packageList = this.packageList.concat(this.packageListService.$listInstall))
+      }).then(packages => this.packageList = this.packageListService.$listInstall.concat(this.packageList))
 
     
   }
@@ -92,15 +92,21 @@ export class PackageComponent implements OnInit {
     }
   }
 
-  removePackage(key: string) {
-    if (confirm(`Are you sure you want to delete ${key}?`))
-      this.databaseHelper.removePackage(key)
+  removePackage(pack: Package) {
+    if (confirm(`Are you sure you want to delete ${pack.$name}?`))
+      this.databaseHelper.removePackage(pack.$name) // TODO of maak hier onderschijd tussen local.
         .then(() => {
           this.searchPackages();
-          alert(`${key} is deleted.`)
+          alert(`${pack.$name} is deleted.`)
         })
         .catch((err) => {
-          alert(`Error while removing package. Error: ${err}`)
+          // Check if local, if yes delete there
+          try {
+            this.packageListService.removeInstalledPackage(pack);
+            this.searchPackages();
+          } catch (err) {
+            alert(`Error while removing package ${pack.$name}.`);
+          }
         });
 
   }

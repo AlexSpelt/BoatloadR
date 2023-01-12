@@ -13,6 +13,7 @@ import { NodesRelation } from './logic/NodesRelation';
   providedIn: 'root'
 })
 export class PackageListService {
+  
   private readonly serverURL: string = 'https://BoatLoadR.alexspelt.nl';
   private listInstall: Array<Package> = [];
   private listActive: Array<Package> = [];
