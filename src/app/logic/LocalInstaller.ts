@@ -79,7 +79,8 @@ export class LocalInstaller implements Installer {
 
             for (let index = 0; index < files.length; index++) {
                 const file = files[index];
-                this.electron.fs.copyFileSync(file.path.toString(), createDirs)
+                console.log('hier log ik de file', index, file)
+                this.electron.fs.renameSync(file.path.toString(), createDirs)
             }
             
             exec('source ~/ros2_ws/install/setup.bash')
